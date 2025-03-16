@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -46,15 +47,36 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+             'email_verified_at' => 'datetime',
+             'password'          => 'hashed',
+             'role'              => UserRole::class,
         ];
     }
 
-    public function isAdmin()
+    public function isAdmin() : bool
     {
-        return $this->role_id == 6;
+        return $this->role === UserRole::ADMIN;
     }
+
+     public function isFreelancer() : bool
+     {
+          return $this->role === UserRole::FREELANCER;
+     }
+
+     public function isClient() : bool
+     {
+          return $this->role === UserRole::CLIENT;
+     }
+
+     public function getDefaultRoute() : string
+     {
+          return  match (auth()->user()->role) {
+               UserRole::ADMIN      => route('admin.dashboard'),
+               UserRole::FREELANCER => route('freelancer.dashboard'),
+               UserRole::CLIENT     => route('client.dashboard'),
+          };
+
+     }
 
     public function projects()
     {

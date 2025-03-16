@@ -53,6 +53,6 @@ class ClientProfileController extends Controller
         // Save the changes
         $client->save();
 
-        return redirect()->route('client.profile.edit')->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile.edit')->with('success', 'Profile updated successfully!');
     }
 }

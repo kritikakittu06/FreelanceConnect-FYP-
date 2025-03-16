@@ -4,20 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Project extends Model
 {
-    use HasFactory;
 
     protected $fillable = ['name', 'description', 'status', 'image', 'user_id'];
 
-    // Relationship: A project belongs to a freelancer (user)
-    public function user()
+    public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // A project has many images
     public function images()
     {
         return $this->hasMany(ProjectImage::class);

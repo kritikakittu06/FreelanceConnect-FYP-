@@ -24,8 +24,12 @@
                 </div>
                 <nav class="flex-grow">
                     <ul class="space-y-2 px-4">
+                        @auth
+                            <?php
+                              $defaultRoute = auth()->user()->getDefaultRoute();
+                            ?>
                         <li>
-                            <a href="{{ route('dashboard') }}"
+                            <a href="{{$defaultRoute}}"
                                 class="flex items-center p-2 rounded {{ request()->routeIs('dashboard') ? 'bg-[#6A45C4]' : 'hover:bg-[#6A45C4]' }}">
                                 <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
@@ -35,6 +39,7 @@
                                 <span class="ml-2">Dashboard</span>
                             </a>
                         </li>
+                        @endauth
                         <li>
                             <a href="{{ route('projects') }}"
                                 class="flex items-center p-2 rounded {{ request()->routeIs('projects') ? 'bg-[#6A45C4]' : 'hover:bg-[#6A45C4]' }}">

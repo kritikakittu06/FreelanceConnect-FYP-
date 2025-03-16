@@ -32,54 +32,30 @@ use Illuminate\Support\Facades\Route;
                 <a class="text-gray-700 hover:text-purple-600" href="{{ route('freelancers.index') }}">
                     Find talent
                 </a>
-
-                <!-- Dropdown: Find work -->
-                <div class="relative group">
-                    <button class="text-gray-700 hover:text-purple-600 focus:outline-none">
-                        Find work
-                        <i class="fas fa-chevron-down ml-1"></i>
-                    </button>
-                    <div class="absolute left-0 mt-2 w-48 bg-white border rounded shadow-lg hidden group-hover:block">
-                        <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100" href="#">
-                            Option 1
-                        </a>
-                        <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100" href="#">
-                            Option 2
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Other Navigation Links -->
                 <a class="text-gray-700 hover:text-purple-600" href="#">
                     Why FreelanceConnect
-                </a>
-                <a class="text-gray-700 hover:text-purple-600" href="#">
-                    What's new
                 </a>
                 <a class="text-gray-700 hover:text-purple-600" href="{{ route('payment.index') }}">
                     Pricing
                 </a>
             </nav>
-
             <!-- Authentication Links -->
             @if (Route::has('login'))
                 <div class="flex space-x-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="text-gray-700 hover:text-purple-600">Dashboard</a>
+                        <a href="{{ auth()->user()->getDefaultRoute() }}" class="text-gray-700 hover:text-purple-600">Dashboard</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="text-gray-700 hover:text-purple-600">Logout</button>
                         </form>
+                        <!-- Profile Edit Link -->
+                        <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-purple-600">
+                            <i class="fas fa-user-edit"></i> <!-- Profile Edit Icon -->
+                        </a>
                     @else
                         <a href="{{ route('login') }}" class="text-gray-700 hover:text-purple-600">Log in</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="text-gray-700 hover:text-purple-600">Sign Up</a>
-                        @endif
+                        <a href="{{ route('register') }}" class="text-gray-700 hover:text-purple-600">Sign Up</a>
                     @endauth
-                     <!-- Profile Edit Link -->
-                     <a href="{{ route('client.profile.edit') }}" class="text-gray-700 hover:text-purple-600">
-                        <i class="fas fa-user-edit"></i> <!-- Profile Edit Icon -->
-                    </a>
                 </div>
             @endif
 
@@ -217,147 +193,8 @@ use Illuminate\Support\Facades\Route;
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-6">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2024 FreelanceHub. All rights reserved.</p>
+            <p>&copy; {{date('Y')}} {{config('app.name')}}. All rights reserved.</p>
         </div>
     </footer>
 </body>
-
 </html>
-
-{{-- <html>
-<head>
-    <title>Freelance Connect</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
-<body class="font-roboto bg-gray-100">
-    <!-- Navbar -->
-    <nav class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-blue-600">Freelance Connect</a>
-            <div class="space-x-4">
-                <a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Projects</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Freelancers</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">About</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Contact</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Sign In</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Sign Up</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="bg-blue-600 text-white py-20">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl font-bold mb-4">Connect with Top Freelancers and Clients</h1>
-            <p class="text-lg mb-8">Find the best projects and freelancers to work with, all in one place.</p>
-            <a href="#" class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold">Get Started</a>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="py-20">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold">Our Features</h2>
-                <p class="text-gray-600">Everything you need to connect and collaborate effectively.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <i class="fas fa-user-plus text-blue-600 text-4xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2">User Authentication and Profiles</h3>
-                    <p class="text-gray-600">Sign up and sign in for both clients and freelancers.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <i class="fas fa-search text-blue-600 text-4xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2">Advanced Search and Filters</h3>
-                    <p class="text-gray-600">Search for projects or freelancers based on specific criteria.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <i class="fas fa-project-diagram text-blue-600 text-4xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2">Project Posting</h3>
-                    <p class="text-gray-600">Clients can create detailed project listings and freelancers can submit proposals.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <i class="fas fa-star text-blue-600 text-4xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2">Rating and Reviews</h3>
-                    <p class="text-gray-600">Both clients and freelancers can leave ratings and reviews after project completion.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <i class="fas fa-briefcase text-blue-600 text-4xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2">Portfolio Building</h3>
-                    <p class="text-gray-600">Freelancers can display completed projects with ratings and client testimonials.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <i class="fas fa-globe text-blue-600 text-4xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2">International Payment System</h3>
-                    <p class="text-gray-600">Secure and easy international payments for all projects.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Project Listings Section -->
-    <section class="py-20 bg-gray-100">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold">Latest Projects</h2>
-                <p class="text-gray-600">Browse through the latest projects posted by clients.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-2">Website Development</h3>
-                    <p class="text-gray-600 mb-4">Looking for a skilled web developer to create a responsive website.</p>
-                    <p class="text-gray-600 mb-2"><strong>Budget:</strong> $1000 - $1500</p>
-                    <p class="text-gray-600 mb-2"><strong>Deadline:</strong> 2 weeks</p>
-                    <a href="#" class="text-blue-600 font-semibold">View Details</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-2">Mobile App Design</h3>
-                    <p class="text-gray-600 mb-4">Need a creative designer to design a user-friendly mobile app interface.</p>
-                    <p class="text-gray-600 mb-2"><strong>Budget:</strong> $500 - $800</p>
-                    <p class="text-gray-600 mb-2"><strong>Deadline:</strong> 1 month</p>
-                    <a href="#" class="text-blue-600 font-semibold">View Details</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-2">SEO Optimization</h3>
-                    <p class="text-gray-600 mb-4">Looking for an SEO expert to improve our website's search engine ranking.</p>
-                    <p class="text-gray-600 mb-2"><strong>Budget:</strong> $300 - $500</p>
-                    <p class="text-gray-600 mb-2"><strong>Deadline:</strong> 1 month</p>
-                    <a href="#" class="text-blue-600 font-semibold">View Details</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-2">Content Writing</h3>
-                    <p class="text-gray-600 mb-4">Need a professional content writer to create engaging blog posts.</p>
-                    <p class="text-gray-600 mb-2"><strong>Budget:</strong> $200 - $400</p>
-                    <p class="text-gray-600 mb-2"><strong>Deadline:</strong> 2 weeks</p>
-                    <a href="#" class="text-blue-600 font-semibold">View Details</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-2">Graphic Design</h3>
-                    <p class="text-gray-600 mb-4">Looking for a talented graphic designer to create marketing materials.</p>
-                    <p class="text-gray-600 mb-2"><strong>Budget:</strong> $400 - $600</p>
-                    <p class="text-gray-600 mb-2"><strong>Deadline:</strong> 3 weeks</p>
-                    <a href="#" class="text-blue-600 font-semibold">View Details</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-2">Social Media Management</h3>
-                    <p class="text-gray-600 mb-4">Need a social media expert to manage our social media accounts.</p>
-                    <p class="text-gray-600 mb-2"><strong>Budget:</strong> $500 - $700</p>
-                    <p class="text-gray-600 mb-2"><strong>Deadline:</strong> 1 month</p>
-                    <a href="#" class="text-blue-600 font-semibold">View Details</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-gray-600">&copy; 2023 Freelance Connect. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
-</html> --}}

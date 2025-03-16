@@ -9,7 +9,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\ClientDashboarController;
+use App\Http\Controllers\ClientDashboardController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\clientfreelancerController;
 use App\Http\Controllers\ClientFreelancerProfileController;
@@ -18,17 +18,50 @@ use App\Http\Controllers\ClientProfileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\PostProjectController;
-
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PostProjectController as ControllersPostProjectController;
 
+
+// Open Routes
+Route::get('/', function () {return view('welcome');});
+
+// Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
 });
+
+// Auth Routes
+Route::middleware('auth')->group(function () {
+     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+     Route::get('profile/edit', [ClientProfileController::class, 'edit'])->name('profile.edit');
+
+     Route::get('/client/freelancers', [ClientFreelancerController::class, 'index'])->name('freelancers.index');
+
+
+     Route::middleware('role:admin')->group(function () {
+          Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+     });
+
+     Route::middleware('role:freelancer')->group(function () {
+          Route::get('/freelancer/dashboard', [FreelancerDashboardController::class, 'index'])->name('freelancer.dashboard');
+     });
+
+     Route::middleware('role:client')->group(function () {
+          Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
+     });
+});
+
+// Sanjeev
+
+
+
+
+
+
+
 Route::get('/messages', function () {
     return view('messages'); // Return the messages view
 })->name('messages.index');
@@ -40,43 +73,18 @@ Route::post('/messages', function (Illuminate\Http\Request $request) {
     return redirect()->route('messages.index')->with('success', 'Message sent successfully!');
 })->name('messages.store');
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 
 
-Route::get('/freelancer/dashboard', [FreelancerDashboardController::class, 'index'])->name('freelancer.dashboard');
-Route::get('/client/dashboard', [ClientDashboarController::class, 'index'])->name('client.dashboard');
-
-Route::get('/dashboard', function () {
-    if (Auth::check()) {
-        if (Auth::user()->role === 'freelancer') {
-            return redirect()->route('freelancer.dashboard');
-        } elseif (Auth::user()->role === 'client') {
-            return redirect()->route('client.dashboard');
-        }
-    }
-    return redirect()->route('login'); // Fallback if not authenticated
-})->name('dashboard');
 
 
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-// Route::middleware(['auth', 'admin'])->group(function () {
-//     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-// });
-Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
 Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
 Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
 Route::get('/admin/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
 Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/client/freelancers', [ClientFreelancerController::class, 'index'])
-         ->name('freelancers.index');
-});
 Route::middleware('auth')->group(function () {
     Route::get('/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('freelancer.profile');
 });
@@ -100,7 +108,6 @@ Route::post('/{freelancer}/review', [RatingController::class, 'reviewFreelancer'
 
 
 // Route for client profile edit
-Route::get('/client/profile/edit', [ClientProfileController::class, 'edit'])->name('client.profile.edit');
 
 // Route for client profile update (submit the form)
 Route::put('/client/profile/edit', [ClientProfileController::class, 'update'])->name('client.profile.update');
@@ -119,7 +126,6 @@ Route::middleware('auth')->group(function () {
     // AJAX route to send a new message
     Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::delete('/chat/delete/{messageId}', [ChatController::class, 'delete'])->name('chat.delete');
-
 
 
 });

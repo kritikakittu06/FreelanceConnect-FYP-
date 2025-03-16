@@ -10,16 +10,15 @@ use Omnipay\Omnipay;
 
 class PaymentController extends Controller
 {
-    private $gateway;
 
     public function __construct()
     {
-        $this->gateway = Omnipay::create('PayPal_Rest'); // Correct gateway name
-        $this->gateway->initialize([
-            'clientId' => env('PAYPAL_CLIENT_ID'), // Use env variables
-            'secret'   => env('PAYPAL_SECRET'),
-            'testMode' => true, // Set to false for live transactions
-        ]);
+//        $this->gateway = Omnipay::create('PayPal_Rest'); // Correct gateway name
+//        $this->gateway->initialize([
+//            'clientId' => env('PAYPAL_CLIENT_ID'), // Use env variables
+//            'secret'   => env('PAYPAL_SECRET'),
+//            'testMode' => true, // Set to false for live transactions
+//        ]);
     }
 
     public function pay(Request $request)

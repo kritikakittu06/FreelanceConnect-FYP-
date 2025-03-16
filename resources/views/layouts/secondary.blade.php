@@ -47,7 +47,7 @@ use Illuminate\Support\Facades\Route;
                     @endauth
 
                     @if(auth()->user()->role === 'client')
-                    <a href="{{ route('client.profile.edit') }}" class="text-gray-700 hover:text-purple-600">
+                    <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-purple-600">
                         <i class="fas fa-user-edit"></i> <!-- Profile Edit Icon -->
                     </a>
                 @endif
