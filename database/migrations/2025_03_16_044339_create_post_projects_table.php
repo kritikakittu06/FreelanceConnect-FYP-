@@ -16,6 +16,8 @@ return new class extends Migration {
                 $table->unsignedBigInteger('freelancer_id');
                 $table->string('project_name');
                 $table->text('project_description');
+                $table->float('budget');
+                $table->date('deadline');
                 $table->timestamps();
 
                 $table->foreign('freelancer_id')->references('id')->on('users')->onDelete('cascade');

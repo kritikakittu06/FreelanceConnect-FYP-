@@ -10,11 +10,12 @@ class ClientFreelancerController extends Controller
     public function index(Request $request)
     {
         // Start with all freelancers
-        $query = User::where('role', 'freelancer')
-            ->has('reviews') // Only freelancers with reviews
-            ->with(['reviews' => function ($query) {
-                $query->whereNotNull('review')->where('review', '!=', '');
-            }, 'reviews.client']);
+        $query = User::query()->where('role', 'freelancer');
+//            ->has('reviews') // Only freelancers with reviews
+//            ->with(['reviews' => function ($query) {
+//                $query->whereNotNull('review')->where('review', '!=', '');
+//            }, 'reviews.client']);
+
 
         // Apply filters based on search input
         if ($request->filled('skills')) {

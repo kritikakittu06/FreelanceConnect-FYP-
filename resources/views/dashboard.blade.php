@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Heroicons (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.18/dist/heroicons.min.js"></script>
-</head>
 <x-app-layout>
-<body class="bg-gray-100 dark:bg-gray-900">
     <div class="flex h-screen">
 
 
@@ -124,6 +109,4 @@
             });
         });
     </script>
-</body>
 </x-app-layout>
-</html>

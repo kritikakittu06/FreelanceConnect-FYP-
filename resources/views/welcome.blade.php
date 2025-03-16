@@ -28,19 +28,25 @@ use Illuminate\Support\Facades\Route;
 
             <!-- Main Navigation (visible on md and up) -->
             <nav class="hidden md:flex space-x-4">
-                <!-- Dropdown: Find talent -->
-                <a class="text-gray-700 hover:text-purple-600" href="{{ route('freelancers.index') }}">
-                    Find talent
-                </a>
+                @auth
+                    @if(auth()->user()->isClient())
+                        <a class="text-gray-700 hover:text-purple-600" href="{{ route('freelancers.index') }}">
+                            Find talent
+                        </a>
+                    @endif
+                @endauth
                 <a class="text-gray-700 hover:text-purple-600" href="#">
                     Why FreelanceConnect
                 </a>
-                <a class="text-gray-700 hover:text-purple-600" href="{{ route('payment.index') }}">
-                    Pricing
-                </a>
+                @auth
+                @if(auth()->user()->isClient())
+                    <a class="text-gray-700 hover:text-purple-600" href="{{ route('payment.index') }}">
+                        Pricing
+                    </a>
+                @endif
+                @endauth
             </nav>
             <!-- Authentication Links -->
-            @if (Route::has('login'))
                 <div class="flex space-x-4">
                     @auth
                         <a href="{{ auth()->user()->getDefaultRoute() }}" class="text-gray-700 hover:text-purple-600">Dashboard</a>
@@ -48,17 +54,17 @@ use Illuminate\Support\Facades\Route;
                             @csrf
                             <button type="submit" class="text-gray-700 hover:text-purple-600">Logout</button>
                         </form>
+                        @if(auth()->user()->isClient())
                         <!-- Profile Edit Link -->
                         <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-purple-600">
                             <i class="fas fa-user-edit"></i> <!-- Profile Edit Icon -->
                         </a>
+                        @endif
                     @else
                         <a href="{{ route('login') }}" class="text-gray-700 hover:text-purple-600">Log in</a>
                         <a href="{{ route('register') }}" class="text-gray-700 hover:text-purple-600">Sign Up</a>
                     @endauth
                 </div>
-            @endif
-
         </div>
     </header>
 

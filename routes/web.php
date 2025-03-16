@@ -36,27 +36,30 @@ Route::middleware('guest')->group(function () {
 // Auth Routes
 Route::middleware('auth')->group(function () {
      Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-     Route::get('profile/edit', [ClientProfileController::class, 'edit'])->name('profile.edit');
-
-     Route::get('/client/freelancers', [ClientFreelancerController::class, 'index'])->name('freelancers.index');
 
 
      Route::middleware('role:admin')->group(function () {
           Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+          Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+          Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
+          Route::get('/admin/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
+          Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
      });
 
      Route::middleware('role:freelancer')->group(function () {
           Route::get('/freelancer/dashboard', [FreelancerDashboardController::class, 'index'])->name('freelancer.dashboard');
+          Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
      });
 
      Route::middleware('role:client')->group(function () {
           Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
+          Route::get('/client/freelancers', [ClientFreelancerController::class, 'index'])->name('freelancers.index');
+          Route::get('paypal', [PaymentController::class, 'index'])->name('payment.index');
+          Route::get('profile/edit', [ClientProfileController::class, 'edit'])->name('clients.profile.edit');
      });
 });
-
 // Sanjeev
-
-
 
 
 
@@ -79,10 +82,6 @@ Route::post('/messages', function (Illuminate\Http\Request $request) {
 
 
 
-Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
-Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
-Route::get('/admin/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
-Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
 
 
 Route::middleware('auth')->group(function () {
@@ -149,7 +148,6 @@ Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'addN
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::match(['post', 'patch'], '/profile/update-image', [ProfileController::class, 'updateImage'])
@@ -192,7 +190,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('paypal', [PaymentController::class, 'index'])->name('payment.index');
 Route::get('paypal/payment', [PaymentController::class, 'payment'])->name('paypal.payment');
 Route::get('paypal/payment/success', [PaymentController::class, 'paymentSuccess'])->name('paypal.payment.success');
 Route::get('paypal/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('paypal.payment/cancel');
