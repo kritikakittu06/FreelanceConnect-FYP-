@@ -5,99 +5,71 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Illuminate\Support\Str;
+use Omnipay\Omnipay;
 
 
 class PaymentController extends Controller
 {
-     /**
-     * Write code on Method
-     *
-     * @return response()
-     */
-    public function index()
-    {
-        return view('payment.index');
-    }
+    private $gateway;
 
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
-    public function payment(Request $request)
+    public function __construct()
     {
-        $provider = new PayPalClient;
-        $provider->setApiCredentials(config('paypal'));
-        $paypalToken = $provider->getAccessToken();
-
-        $response = $provider->createOrder([
-            "intent" => "CAPTURE",
-            "application_context" => [
-                "return_url" => route('paypal.payment.success'),
-                "cancel_url" => route('paypal.payment/cancel'),
-            ],
-            "purchase_units" => [
-                0 => [
-                    "amount" => [
-                        "currency_code" => "USD",
-                        "value" => "100.00"
-                    ]
-                ]
-            ]
+        $this->gateway = Omnipay::create('PayPal_Rest'); // Correct gateway name
+        $this->gateway->initialize([
+            'clientId' => env('PAYPAL_CLIENT_ID'), // Use env variables
+            'secret'   => env('PAYPAL_SECRET'),
+            'testMode' => true, // Set to false for live transactions
         ]);
+    }
 
-        if (isset($response['id']) & $response['id'] != null) {
+    public function pay(Request $request)
+    {
+        try {
+            $response = $this->gateway->purchase([
+                'amount'    => $request->amount,
+                'currency'  => env('PAYPAL_CURRENCY', 'USD'), // Default to USD if not set
+                'returnUrl' => route('payment.success'), // Ensure these routes exist
+                'cancelUrl' => route('payment.cancel'),
+            ])->send(); // ✅ Must call `send()`
 
-            foreach ($response['links'] as $links) {
-                if ($links['rel'] == 'approve') {
-                    return redirect()->away($links['href']);
-                }
+           if ($response-> isRedirect()){
+            $response->redirect();
+           }
+           else{
+                return  $response ->getMessage();
+           }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    public function success(Request $request)
+    {
+        try {
+            $response = $this->gateway->completePurchase([
+                'payer_id' => $request->PayerID,
+                'payment_id' => $request->paymentId,
+                'token' => $request->token,
+                'amount' => $request->amount,
+                'currency' => env('PAYPAL_CURRENCY', 'USD'),
+            ])->send();
+
+            if ($response->isSuccessful()) {
+                return 'Payment was successful!';
+            } else {
+                return 'Payment was not successful!';
             }
-
-            return redirect()
-                ->route('cancel.payment')
-                ->with('error', 'Something went wrong.');
-
-        } else {
-            return redirect()
-                ->route('create.payment')
-                ->with('error', $response['message'] ?? 'Something went wrong.');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
         }
-
     }
 
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
-    public function paymentCancel()
+    public function cancel()
     {
-        return redirect()
-              ->route('paypal')
-              ->with('error', $response['message'] ?? 'You have canceled the transaction.');
+        return 'User decline the payment!';
     }
 
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
-    public function paymentSuccess(Request $request)
-    {
-        $provider = new PayPalClient;
-        $provider->setApiCredentials(config('paypal'));
-        $provider->getAccessToken();
-        $response = $provider->capturePaymentOrder($request['token']);
-
-        if (isset($response['status']) & $response['status'] == 'COMPLETED') {
-            return redirect()
-                ->route('paypal')
-                ->with('success', 'Transaction complete.');
-        } else {
-            return redirect()
-                ->route('paypal')
-                ->with('error', $response['message'] ?? 'Something went wrong.');
-        }
+    public function error(){
+        return 'User decline the payment!';
     }
 }

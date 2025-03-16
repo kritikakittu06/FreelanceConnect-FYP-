@@ -26,11 +26,16 @@
                 <p class="text-gray-600">Search for the perfect freelancer for your job.</p>
             </div>
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <form method="GET" action="{{ route('freelancers.index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <input type="text" name="skills" value="{{ request('skills') }}" placeholder="Skills (e.g., PHP, React)" class="border border-gray-300 p-2 rounded">
-                    <input type="number" name="experience" value="{{ request('experience') }}" placeholder="Min Experience (Years)" class="border border-gray-300 p-2 rounded">
-                    <input type="text" name="budget" value="{{ request('budget') }}" placeholder="Max Budget " class="border border-gray-300 p-2 rounded">
-                    <input type="text" name="location" value="{{ request('location') }}" placeholder="Location (e.g., New York)" class="border border-gray-300 p-2 rounded">
+                <form method="GET" action="{{ route('freelancers.index') }}"
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <input type="text" name="skills" value="{{ request('skills') }}"
+                        placeholder="Skills (e.g., PHP, React)" class="border border-gray-300 p-2 rounded">
+                    <input type="number" name="experience" value="{{ request('experience') }}"
+                        placeholder="Min Experience (Years)" class="border border-gray-300 p-2 rounded">
+                    <input type="text" name="budget" value="{{ request('budget') }}" placeholder="Max Budget "
+                        class="border border-gray-300 p-2 rounded">
+                    <input type="text" name="location" value="{{ request('location') }}"
+                        placeholder="Location (e.g., New York)" class="border border-gray-300 p-2 rounded">
                     <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Search</button>
                 </form>
             </div>
@@ -157,6 +162,96 @@
                             class="text-purple-600 font-semibold block text-center">
                             View Profile
                         </a>
+                        <!-- Post Project Button -->
+                        <button onclick="openModal({{ $freelancer->id }})"
+                            class="mt-4 px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            Post Project
+                        </button>
+
+                        <!-- Post Project Modal (Hidden by Default) -->
+                        <div id="postProjectModal-{{ $freelancer->id }}"
+                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                                <h2 class="text-2xl font-semibold mb-4">Post a Project</h2>
+
+                                <form id="postProjectForm-{{ $freelancer->id }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="freelancer_id" value="{{ $freelancer->id }}">
+
+                                    <label class="block mb-2 font-semibold">Project Title:</label>
+                                    <input type="text" name="title" class="w-full border p-2 rounded mb-3" required>
+
+                                    <label class="block mb-2 font-semibold">Project Description:</label>
+                                    <textarea name="description" class="w-full border p-2 rounded mb-3" required></textarea>
+
+                                    <label class="block mb-2 font-semibold">Budget:</label>
+                                    <input type="number" name="budget" class="w-full border p-2 rounded mb-3" required>
+
+                                    <label class="block mb-2 font-semibold">Deadline:</label>
+                                    <input type="date" name="deadline" class="w-full border p-2 rounded mb-3"
+                                        required>
+
+                                    <div class="flex justify-end space-x-2">
+                                        <button type="button" onclick="closeModal({{ $freelancer->id }})"
+                                            class="px-4 py-2 rounded bg-gray-400 text-white hover:bg-gray-500">
+                                            Cancel
+                                        </button>
+                                        <button type="submit"
+                                            class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">
+                                            Submit Project
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                // Attach form submit event listener for each freelancer's post project form
+                                document.querySelectorAll("[id^='postProjectForm']").forEach(form => {
+                                    form.addEventListener("submit", function(event) {
+                                        event.preventDefault(); // Prevent default form submission
+
+                                        let formData = new FormData(this); // Capture form data
+                                        let freelancerId = formData.get(
+                                            "freelancer_id"); // Extract freelancer_id from the form data
+
+                                        // Make the fetch request to store the project
+                                        fetch("{{ route('post.project') }}", {
+                                                method: "POST",
+                                                body: formData,
+                                                headers: {
+                                                    'X-CSRF-TOKEN': document.querySelector(
+                                                        'meta[name="csrf-token"]').getAttribute('content'),
+                                                    'Accept': 'application/json'
+                                                }
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    alert("Project posted successfully!");
+                                                } else {
+                                                    console.error("Error:", data);
+                                                    alert("Failed to post project.");
+                                                }
+                                            })
+                                            .catch(error => console.error("Fetch error:", error));
+
+                                    });
+                                });
+                            });
+
+                            // Open modal
+                            function openModal(freelancerId) {
+                                document.getElementById(`postProjectModal-${freelancerId}`).classList.remove('hidden');
+                            }
+
+                            // Close modal
+                            function closeModal(freelancerId) {
+                                document.getElementById(`postProjectModal-${freelancerId}`).classList.add('hidden');
+                            }
+                        </script>
+
+
                     </div>
                 @endforeach
             </div>
@@ -204,7 +299,8 @@
                     <div class="flex items-center">
                         <!-- Display client profile image -->
                         <img alt="Portrait of a satisfied client" class="w-10 h-10 rounded-full mr-4"
-                            src="{{ asset('storage/' . $review->client->profile_image) }}" width="40" height="40" />
+                            src="{{ asset('storage/' . $review->client->profile_image) }}" width="40"
+                            height="40" />
 
                         <div>
                             <p class="text-gray-700 font-semibold">{{ $review->client->name }}</p>

@@ -20,11 +20,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\PostProjectController;
 
 use App\Http\Controllers\PaymentController;
-
-
+use App\Http\Controllers\PostProjectController as ControllersPostProjectController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
@@ -192,5 +191,6 @@ Route::get('paypal/payment', [PaymentController::class, 'payment'])->name('paypa
 Route::get('paypal/payment/success', [PaymentController::class, 'paymentSuccess'])->name('paypal.payment.success');
 Route::get('paypal/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('paypal.payment/cancel');
 
+Route::post('/post-project', [PostProjectController::class, 'store'])->name('post.project');
 
 require __DIR__.'/auth.php';
