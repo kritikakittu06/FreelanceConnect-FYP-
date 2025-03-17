@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -43,4 +45,29 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+     public function withRandomSkills(int $min = 2, int $max = 6) : Factory|UserFactory
+     {
+
+          return $this->state(new Sequence(function(Sequence $sequence) use ($min, $max) {
+               $skills = [
+                    'java', 'php', 'javascript', 'react', 'laravel', 'python', 'c++', 'c#',
+                    'sql', 'mysql', 'postgresql', 'mongodb', 'oracle', 'firebase', 'html',
+                    'css', 'tailwind', 'bootstrap', 'vue', 'angular', 'node.js', 'express.js',
+                    'django', 'flask', 'spring boot', 'ruby', 'rails', 'go', 'rust', 'typescript'
+               ];
+               $shuffledSkills = Arr::shuffle($skills);
+               $selectedSkills = array_slice($shuffledSkills, 0, rand($min, $max));
+               return ['skills' => implode(',', $selectedSkills)];
+          }));
+     }
+     public function freelancer(): static
+     {
+          return $this->state([
+               'role'           => UserRole::FREELANCER,
+               'experience'     => fake()->sentence(),
+               'project_budget' => fake()->sentence(),
+               'location'       => fake()->address()
+          ]);
+     }
 }

@@ -12,6 +12,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
+        @include('_partials.common-styles')
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
@@ -20,7 +21,7 @@
             <!-- Sidebar -->
             <div class="w-64 bg-[#7F55E0] text-white flex flex-col min-h-screen">
                 <div class="py-6 px-4">
-                    <h1 class="text-2xl font-bold">Freelancer</h1>
+                    <a href="{{route('welcome')}}" class="text-2xl font-bold">Freelancer</a>
                 </div>
                 <nav class="flex-grow">
                     <ul class="space-y-2 px-4">
@@ -30,7 +31,7 @@
                             ?>
                         <li>
                             <a href="{{$defaultRoute}}"
-                                class="flex items-center p-2 rounded {{ request()->routeIs('dashboard') ? 'bg-[#6A45C4]' : 'hover:bg-[#6A45C4]' }}">
+                                class="flex items-center p-2 rounded {{ request()->routeIs(['*.dashboard', 'dashboard.*']) ? 'bg-[#6A45C4]' : 'hover:bg-[#6A45C4]' }}">
                                 <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -41,8 +42,8 @@
                         </li>
                         @endauth
                         <li>
-                            <a href="{{ route('projects') }}"
-                                class="flex items-center p-2 rounded {{ request()->routeIs('projects') ? 'bg-[#6A45C4]' : 'hover:bg-[#6A45C4]' }}">
+                            <a href="{{ route('projects.index') }}"
+                                class="flex items-center p-2 rounded {{ request()->routeIs('projects.*') ? 'bg-[#6A45C4]' : 'hover:bg-[#6A45C4]' }}">
                                 <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,13 +53,13 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('clients.index') }}" class="flex items-center p-2 rounded hover:bg-[#6A45C4]">
+                            <a href="{{ route('clients.index') }}" class="flex items-center p-2 rounded {{ request()->routeIs('clients.*') ? 'bg-[#6A45C4]' : 'hover:bg-[#6A45C4]' }}">
                                 <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M3 10h18M3 6h18M3 14h18m-9 4h9"></path>
                                 </svg>
-                                <span class="ml-2">Client</span>
+                                <span class="ml-2">Clients</span>
                             </a>
                         </li>
                         <li>
@@ -72,17 +73,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center p-2 rounded hover:bg-[#6A45C4]">
-                                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 10h18M3 6h18M3 14h18m-9 4h9"></path>
-                                </svg>
-                                <span class="ml-2">Setting</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center p-2 rounded hover:bg-[#6A45C4]">
+                            <a href="{{route('profile.edit')}}" class="flex items-center p-2 rounded {{ request()->routeIs('profile.*') ? 'bg-[#6A45C4]' : 'hover:bg-[#6A45C4]' }}">
                                 <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -115,5 +106,7 @@
             </div>
 
         </div>
+        @include('_partials.common-scripts')
+        @stack('scripts')
     </body>
 </html>

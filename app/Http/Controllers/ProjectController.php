@@ -26,51 +26,37 @@ class ProjectController extends Controller
     // Store a new project with multiple images
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'status' => 'required|string',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:1024',
-        ]);
+             'name'        => 'required|string|max:255',
+             'description' => 'required|string',
+             'images'      => 'nullable|array',
+             'images.*'    => 'image|max:1024',
+        ], [], ['images.*' => 'image']);
 
         // Store the project in the database
-        $project = Project::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
-            'user_id' => Auth::id(),
+        $project = Project::query()->create([
+             'name'        => $request->name,
+             'description' => $request->description,
+             'user_id'     => Auth::id(),
         ]);
 
-        // Handle multiple images upload
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                // Store the image in the 'projects' directory in storage/public
                 $imagePath = $image->store('projects', 'public');
-
-                // Save the image path in the database
-                ProjectImage::create([
-                    'project_id' => $project->id,
-                    'image' => $imagePath,
+                ProjectImage::query()->create([
+                     'project_id' => $project->id,
+                     'image'      => $imagePath,
                 ]);
             }
         }
 
-        return redirect()->route('projects')->with('success', 'Project created successfully!');
-    }
-
-    // Fetch a single project (only if it belongs to the authenticated user)
-    public function show($id)
-    {
-        $project = Project::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-        return response()->json($project);
+        return redirect()->route('projects.index')->with('toast.success', 'Project created successfully!');
     }
 
     // Show the edit form (only for the authenticated user's project)
     public function edit($id)
     {
-        $project = Project::where('id', $id)
+        $project = Project::query()->where('id', $id)
             ->where('user_id', Auth::id())
             ->with('images') // Load related images
             ->firstOrFail();
@@ -81,57 +67,48 @@ class ProjectController extends Controller
     // Update a project with multiple images
     public function update(Request $request, $id)
     {
-        $project = Project::findOrFail($id);
+         $request->validate([
+              'name'             => 'required|string|max:255',
+              'description'      => 'required|string',
+              'images'           => 'nullable|array',
+              'images.*'         => 'image|max:1024',
+              'removed_images'   => ['nullable', 'array'],
+         ], [], ['images.*' => 'image']);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'status' => 'required|string',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:1024',
-        ]);
-
-        // Update project details
+        $project = Project::query()->with('images')->findOrFail($id);
         $project->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'status' => $request->input('status'),
+             'name'        => $request->input('name'),
+             'description' => $request->input('description'),
         ]);
 
-        // Handle image updates
+        if(!empty($request->input('removed_images'))) {
+             $images = ProjectImage::query()->whereIn('id', $request->input('removed_images'))->get();
+             foreach ($images as $image) {
+                  Storage::disk('public')->delete($image->image);
+                  $image->delete();
+             }
+        }
         if ($request->hasFile('images')) {
-            // Delete old images
-            foreach ($project->images as $image) {
-                Storage::disk('public')->delete($image->image); // Remove from storage
-                $image->delete(); // Remove from DB
-            }
-
-            // Store new images
             foreach ($request->file('images') as $image) {
                 $imagePath = $image->store('projects', 'public');
-                ProjectImage::create([
-                    'project_id' => $project->id,
-                    'image' => $imagePath,
-                ]);
+                 ProjectImage::query()->create([
+                      'project_id' => $project->id,
+                      'image'      => $imagePath,
+                 ]);
             }
         }
-
-        return redirect()->route('projects')->with('success', 'Project updated successfully!');
+        return redirect()->route('projects.index')->with('toast.success', 'Project updated successfully!');
     }
 
     // Delete a project (only if it belongs to the authenticated user)
     public function destroy($id)
     {
-        $project = Project::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-
-        // Delete associated images
-        foreach ($project->images as $image) {
-            Storage::disk('public')->delete($image->image); // Remove from storage
-            $image->delete(); // Remove from DB
+        $project = Project::query()->with('images')->where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        foreach ($project->images as $projectImage) {
+            Storage::disk('public')->delete($projectImage->image);
+             $projectImage->delete();
         }
-
         $project->delete();
-
-        return redirect()->route('projects')->with('success', 'Project deleted successfully');
+        return redirect()->route('projects.index')->with('toast.success', 'Project deleted successfully');
     }
 }

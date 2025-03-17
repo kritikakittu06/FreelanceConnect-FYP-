@@ -22,38 +22,19 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information, including image.
-     */
+
     public function update(Request $request): RedirectResponse
     {
         $user = $request->user();
-
-        // Validate request including new fields
         $validated = $request->validate([
-            'profile_image' => ['nullable', 'image', 'max:2048'],
-            'skills' => ['nullable', 'string', 'max:255'],
-            'experience' => ['nullable', 'string', 'max:1000'],
-            'project_budget' => ['nullable', 'string', 'max:255'],
-            'location' => ['nullable', 'string', 'max:255'],
+             'skills'         => ['nullable', 'string', 'max:255'],
+             'experience'     => ['nullable', 'string', 'max:1000'],
+             'project_budget' => ['nullable', 'string', 'max:255'],
+             'location'       => ['nullable', 'string', 'max:255'],
+             'name'           => ['nullable', 'string', 'max:255'],
         ]);
-
-        // Handle image upload
-        if ($request->hasFile('profile_image')) {
-            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
-
-            // Delete old image if exists
-            if ($user->profile_image) {
-                Storage::disk('public')->delete($user->profile_image);
-            }
-
-            $validated['profile_image'] = $imagePath;
-        }
-
-        // Update user profile fields
         $user->update($validated);
-
-        return Redirect::route('profile.edit')->with('status', 'Profile updated successfully.');
+        return Redirect::route('profile.edit')->with('toast.success', 'Profile updated successfully.');
     }
 
 
@@ -66,27 +47,17 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        if (!$user) {
-            return Redirect::route('profile.edit')->with('error', 'User not found.');
+        if ($request->hasFile('profile_image')) {
+           $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+
+           if (!empty($user->profile_image) && Storage::disk('public')->exists($user->profile_image)) {
+               Storage::disk('public')->delete($user->profile_image);
+           }
+
+           $user->update(['profile_image' => $imagePath]);
         }
 
-        try {
-            if ($request->hasFile('profile_image')) {
-                $imagePath = $request->file('profile_image')->store('profile_images', 'public');
-
-                // Delete old image if it exists
-                if (!empty($user->profile_image) && Storage::disk('public')->exists($user->profile_image)) {
-                    Storage::disk('public')->delete($user->profile_image);
-                }
-
-                // Update user profile image
-                $user->update(['profile_image' => $imagePath]);
-            }
-
-            return Redirect::route('profile.edit')->with('status', 'image-updated');
-        } catch (\Exception $e) {
-            return Redirect::route('profile.edit')->with('error', 'Failed to update profile image. Please try again.');
-        }
+       return Redirect::route('profile.edit')->with('toast.success', 'Profile Image Updated');
     }
 
 

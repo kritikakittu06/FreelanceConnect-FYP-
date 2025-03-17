@@ -24,7 +24,7 @@ use App\Http\Controllers\PaymentController;
 
 
 // Open Routes
-Route::get('/', function () {return view('welcome');});
+Route::get('/', function () {return view('welcome');})->name('welcome');
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
@@ -37,7 +37,6 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
      Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-
      Route::middleware('role:admin')->group(function () {
           Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
           Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
@@ -49,6 +48,14 @@ Route::middleware('auth')->group(function () {
      Route::middleware('role:freelancer')->group(function () {
           Route::get('/freelancer/dashboard', [FreelancerDashboardController::class, 'index'])->name('freelancer.dashboard');
           Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+          Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+          Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+          Route::post('/projects', [ProjectController::class, 'store'])->name('project.store');
+          Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+          Route::get('/projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+          Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+          Route::put('/profile/update-image', [ProfileController::class, 'updateImage'])->name('profile.update-image');
+          Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
      });
 
@@ -57,6 +64,11 @@ Route::middleware('auth')->group(function () {
           Route::get('/client/freelancers', [ClientFreelancerController::class, 'index'])->name('freelancers.index');
           Route::get('paypal', [PaymentController::class, 'index'])->name('payment.index');
           Route::get('profile/edit', [ClientProfileController::class, 'edit'])->name('clients.profile.edit');
+          Route::get('/post-project/{user}', [PostProjectController::class, 'index'])->name('post.project.index');
+          Route::post('/post-project', [PostProjectController::class, 'store'])->name('post.project.store');
+          Route::post('/{freelancer}/review', [RatingController::class, 'reviewFreelancer'])->name('review.freelancer');
+
+          Route::get('/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('freelancer.profile');
      });
 });
 // Sanjeev
@@ -85,15 +97,6 @@ Route::post('/messages', function (Illuminate\Http\Request $request) {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('freelancer.profile');
-});
-
-
-
-
-
-
-Route::middleware('auth')->group(function () {
     // Freelancer's Chat Interface (Freelancer side)
     Route::get('/freelancer/chat/{otherUserId}', [ChatController::class, 'freelancerChat'])->name('freelancer.chat');
 
@@ -102,8 +105,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::delete('/chat/delete/{messageId}', [ChatController::class, 'delete'])->name('chat.delete');
 });
-Route::post('/{freelancer}/rate', [RatingController::class, 'rateFreelancer'])->name('rate.freelancer');
-Route::post('/{freelancer}/review', [RatingController::class, 'reviewFreelancer'])->name('review.freelancer');
+
 
 
 // Route for client profile edit
@@ -129,11 +131,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
-// Route::get('/dashboard', [FreelancerDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-// Route::get('/clientdashboard', [ClientDashboarController::class, 'index'])->name('Clientdashboard');
-Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
-
-// Route::get('/clients', [ClientController::class, 'index'])->name('clients');
+// Also Admin ?
 Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('clients.index');
 Route::get('/dashboard/clients/create', [ClientController::class, 'create'])->name('clients.create');
 Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('clients.store');
@@ -148,10 +146,8 @@ Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'addN
 
 
 Route::middleware('auth')->group(function () {
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::match(['post', 'patch'], '/profile/update-image', [ProfileController::class, 'updateImage'])
-    ->name('profile.update-image');
+
 
 
 });
@@ -177,14 +173,8 @@ Route::middleware(['auth'])->group(function () {
 // });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
-    Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
-    Route::post('/projects', [ProjectController::class, 'store'])->name('project.store');
-    Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
-    Route::get('/projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
-    Route::put('/projects/{id}', [ProjectController::class, 'update'])->name('projects.update');
-    Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
-    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
+
 
 
 
@@ -194,6 +184,5 @@ Route::get('paypal/payment', [PaymentController::class, 'payment'])->name('paypa
 Route::get('paypal/payment/success', [PaymentController::class, 'paymentSuccess'])->name('paypal.payment.success');
 Route::get('paypal/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('paypal.payment/cancel');
 
-Route::post('/post-project', [PostProjectController::class, 'store'])->name('post.project');
 
 require __DIR__.'/auth.php';

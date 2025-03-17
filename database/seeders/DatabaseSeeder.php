@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,10 +25,12 @@ class DatabaseSeeder extends Seeder
              'email' => 'client@example.com',
              'role'  => UserRole::CLIENT,
         ]);
-         User::factory()->create([
+
+         User::factory()->freelancer()->withRandomSkills()->create([
               'name'  => 'freelancer',
               'email' => 'freelancer@example.com',
               'role'  => UserRole::FREELANCER,
          ]);
+         User::factory()->freelancer()->withRandomSkills()->count(50)->create();
     }
 }

@@ -82,6 +82,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class);
     }
+
+     public function freelanceProjects()
+     {
+          return $this->hasMany(PostProject::class, 'freelancer_id');
+     }
+
     /**
      * Messages sent by the user.
      */
@@ -98,17 +104,6 @@ class User extends Authenticatable
         return $this->hasMany(ChatMessage::class, 'receiver_id');
     }
 
-    // Calculate the average rating for a freelancer
-    public function averageRating()
-    {
-        return $this->hasMany(Rating::class, 'freelancer_id')->avg('rating');
-    }
-
-    // Display total number of ratings
-    public function totalRatings()
-    {
-        return $this->hasMany(Rating::class, 'freelancer_id')->count();
-    }
 
     public function reviews()
     {
