@@ -5,7 +5,7 @@
         <div class="mx-auto w-full bg-white shadow-lg rounded-lg p-6">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">Post a Project</h2>
 
-            <form id="postProjectForm-{{ $freelancer->id }}" action="{{route('post.project.store')}}" method="POST">
+            <form id="postProjectForm-{{ $freelancer->id }}" action="{{route('clients.post-project.store')}}" method="POST">
                 @csrf
                 <input type="hidden" name="freelancer_id" value="{{ $freelancer->id }}">
 

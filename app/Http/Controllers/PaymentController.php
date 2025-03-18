@@ -2,50 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PostProjectStatus;
+use App\Models\payment;
+use App\Models\PostProject;
 use Illuminate\Http\Request;
-use Srmklive\PayPal\Services\PayPal as PayPalClient;
-use Illuminate\Support\Str;
-use Omnipay\Omnipay;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 
 class PaymentController extends Controller
 {
-
-    public function __construct()
-    {
-//        $this->gateway = Omnipay::create('PayPal_Rest'); // Correct gateway name
-//        $this->gateway->initialize([
-//            'clientId' => env('PAYPAL_CLIENT_ID'), // Use env variables
-//            'secret'   => env('PAYPAL_SECRET'),
-//            'testMode' => true, // Set to false for live transactions
-//        ]);
-    }
-
-
      public function index()
      {
           return view('front.clients.projects');
      }
 
-    public function pay(Request $request)
-    {
-        try {
-            $response = $this->gateway->purchase([
-                'amount'    => $request->amount,
-                'currency'  => env('PAYPAL_CURRENCY', 'USD'), // Default to USD if not set
-                'returnUrl' => route('payment.success'), // Ensure these routes exist
-                'cancelUrl' => route('payment.cancel'),
-            ])->send(); // ✅ Must call `send()`
+     public function prePaymentValidation(Request $request){
+          $session_total = session('total');
+          $total = $request->input('total');
+          if (floatval($total) != floatval($session_total)) {
+               return response()->json(['Price Discrepancy']);
+          }
+          return response()->json([
+               'successful_validation' => 'success',
+          ],200);
+     }
 
-           if ($response-> isRedirect()){
-            $response->redirect();
-           }
-           else{
-                return  $response ->getMessage();
-           }
-        } catch (\Throwable $th) {
-            return $th->getMessage();
-        }
+     /**
+      * @throws Throwable
+      */
+     public function fulfillOrder(Request $request, $postProjectId)
+    {
+         $postProject = PostProject::query()->where('client_id', auth()->user()->id)->where('id', $postProjectId)->firstOrFail();
+         DB::transaction(function () use ($request, $postProject) {
+              $total = $request->input('total');
+              Payment::query()->create([
+                   'transaction_id'  => $request->transaction_id,
+                   'paid_by'         => auth()->user()->id,
+                   'paid_to'         => $postProject->freelancer_id,
+                   'post_project_id' => $postProject->id,
+                   'amount'          => $total,
+              ]);
+              $postProject->update([
+                   'status' => PostProjectStatus::COMPLETED,
+              ]);
+         });
+         return redirect()->route('clients.post-projects')->with('toast.success', 'Payment created!!');
     }
 
     public function success(Request $request)
@@ -64,17 +66,9 @@ class PaymentController extends Controller
             } else {
                 return 'Payment was not successful!';
             }
-        } catch (\Throwable $th) {
+        } catch ( Throwable $th) {
             return $th->getMessage();
         }
     }
 
-    public function cancel()
-    {
-        return 'User decline the payment!';
-    }
-
-    public function error(){
-        return 'User    decline the payment!';
-    }
 }

@@ -18,14 +18,4 @@ enum PostProjectStatus: string{
           };
      }
 
-     public function statusClass() : string
-     {
-          return match ($this){
-               self::PENDING                   => 'indigo',
-               self::ACCEPTED, self::COMPLETED => 'green',
-               self::REJECTED                  => 'red',
-          };
-     }
-
-
 }

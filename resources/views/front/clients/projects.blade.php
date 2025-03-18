@@ -26,9 +26,16 @@
                         <p class="text-lg mb-2"><strong>Freelancer:</strong> <a class="text-purple-500" href="{{route('clients.freelancer.profile', $postProject->freelancer->id)}}">{{ucwords($postProject->freelancer->name)}}</a></p>
                         <p class="text-lg mb-2"><strong>Budget:</strong> ${{number_format($postProject->budget, 2)}}</p>
                         <p class="text-lg mb-2"><strong>Deadline:</strong> {{\Carbon\Carbon::parse($postProject->deadline)->format('d M, Y')}}</p>
-                        <p class="text-lg mb-4"><strong>Status:</strong><span class="ml-2 px-3 py-1 text-sm font-semibold rounded-full  bg-{{$postProject->status->statusClass()}}-300">{{$postProject->status->label()}}</span></p>
+                        <p class="text-lg mb-4"><strong>Status:</strong><span
+                        @class([
+            'ml-2 px-3 py-1 text-sm font-semibold rounded-full',
+            'bg-blue-500 text-white' => $postProject->status === \App\Enums\PostProjectStatus::ACCEPTED,
+            'bg-green-500 text-white' => $postProject->status === \App\Enums\PostProjectStatus::COMPLETED,
+            'bg-yellow-500 text-black' => $postProject->status === \App\Enums\PostProjectStatus::PENDING,
+            'bg-red-500 text-white' => $postProject->status === \App\Enums\PostProjectStatus::REJECTED,
+        ])>{{$postProject->status->label()}}</span></p>
                     </div>
-                    <a href="#" class="w-full bg-purple-600 text-center text-white py-3 rounded-lg hover:bg-purple-700 transition-all duration-300">
+                    <a href="{{route('clients.post-projects.show', $postProject->id)}}" class="w-full bg-purple-600 text-center text-white py-3 rounded-lg hover:bg-purple-700 transition-all duration-300">
                         View Details
                     </a>
                 </div>

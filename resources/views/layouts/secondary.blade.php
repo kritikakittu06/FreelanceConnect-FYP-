@@ -19,7 +19,7 @@
         <nav class="hidden md:flex space-x-4">
             @auth
                 @if(auth()->user()->isClient())
-                    <a class="text-gray-700 hover:text-purple-600" href="{{ route('freelancers.index') }}">
+                    <a class="text-gray-700 hover:text-purple-600" href="{{ route('clients.freelancers.index') }}">
                         Find talent
                     </a>
                 @endif

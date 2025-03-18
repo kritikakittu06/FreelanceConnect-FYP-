@@ -3,7 +3,7 @@
     <div class="py-5 min-h-[calc(100vh-136px)] flex items-center justify-center mx-auto max-w-lg">
         <div class="mx-auto w-full bg-white shadow-lg rounded-lg p-6">
             <h2 class="text-3xl font-semibold text-center text-purple-600 mb-6">Edit Profile</h2>
-            <form action="{{ route('client.profile.update') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('clients.profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="mb-4">

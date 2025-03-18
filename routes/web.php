@@ -60,16 +60,22 @@ Route::middleware('auth')->group(function () {
      });
 
      Route::middleware('role:client')->group(function () {
-          Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
-          Route::get('/client/freelancers', [ClientFreelancerController::class, 'index'])->name('freelancers.index');
+          Route::get('client/dashboard', [ClientDashboardController::class, 'index'])->name('clients.dashboard');
+          Route::get('client/freelancers', [ClientFreelancerController::class, 'index'])->name('clients.freelancers.index');
+          Route::get('client/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('clients.freelancer.profile');
           Route::get('client/post-projects', [PostProjectController::class, 'index'])->name('clients.post-projects');
+          Route::get('client/post-projects/{id}/show', [PostProjectController::class, 'show'])->name('clients.post-projects.show');
           Route::get('client/post-project/{user}/create', [PostProjectController::class, 'create'])->name('clients.post-project.create');
-          Route::get('profile/edit', [ClientProfileController::class, 'edit'])->name('clients.profile.edit');
-          Route::post('/post-project', [PostProjectController::class, 'store'])->name('post.project.store');
-          Route::post('/{freelancer}/review', [RatingController::class, 'reviewFreelancer'])->name('review.freelancer');
-          Route::get('/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('clients.freelancer.profile');
-          Route::put('/client/profile/update', [ClientProfileController::class, 'update'])->name('client.profile.update');
+          Route::post('client/post-project', [PostProjectController::class, 'store'])->name('clients.post-project.store');
+          Route::get('client/profile/edit', [ClientProfileController::class, 'edit'])->name('clients.profile.edit');
+          Route::put('client/profile/update', [ClientProfileController::class, 'update'])->name('clients.profile.update');
+          Route::post('client/{freelancer}/review', [RatingController::class, 'reviewFreelancer'])->name('clients.review.freelancer');
 
+
+          Route::post('client/payment/pre-payment-validation', [PaymentController::class, 'prePaymentValidation'])->name('clients.payment.pre-payment-validation');
+          Route::post('client/payment/{postProjectId}/fulfill-order', [PaymentController::class, 'fulfillOrder'])->name('clients.payment.fulfillOrder');
+          Route::get('paypal/payment/success', [PaymentController::class, 'paymentSuccess'])->name('clients.payment.success');
+          Route::get('paypal/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('clients.payment.cancel');
      });
 });
 // Sanjeev
@@ -172,17 +178,6 @@ Route::middleware(['auth'])->group(function () {
 //     Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.view');
 // });
 
-Route::middleware('auth')->group(function () {
-
-
-
-
-
-});
-
-Route::get('paypal/payment', [PaymentController::class, 'payment'])->name('paypal.payment');
-Route::get('paypal/payment/success', [PaymentController::class, 'paymentSuccess'])->name('paypal.payment.success');
-Route::get('paypal/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('paypal.payment/cancel');
 
 
 require __DIR__.'/auth.php';

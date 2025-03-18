@@ -36,9 +36,8 @@ return [
     ],
 
     'paypal' => [
-    'client_id' => env('ARm76ATB2OzePj2s6IavIKeQVoPEBCZySufaPv3I60M-3nfuOTZyWKAX5MzUM0NSmsePWsFtHEV3wZqC'),  // Use the environment variable for the client ID
-    'secret' => env('ENQ9wcgeaT0Nqfch0alpU-ubiJbQ943GcCk33PGVO5Ault-0CAGc6mlvjLBNZzYtfbo4i8GfYl3IDVAF'),  // Use the environment variable for the secret
-    'sandbox' => env('PAYPAL_MODE') === 'sandbox', // Check if the mode is 'sandbox' based on the .env file
+    'client_id' => env('PAYPAL_CLIENT_ID'),
+    'secret' => env('PAYPAL_SECRET_KEY'),
 ],
 
 

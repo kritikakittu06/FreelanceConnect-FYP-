@@ -55,4 +55,13 @@ class PostProjectController extends Controller
 
      }
 
+     public function show($id)
+     {
+          $postProject = PostProject::query()->with('freelancer')->findOrFail($id);
+          if($postProject->client_id !== auth()->user()->id){
+               abort(403);
+          }
+          return view('front.clients.post-project-show', ['postProject' => $postProject]);
+     }
+
 }

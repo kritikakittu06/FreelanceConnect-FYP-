@@ -48,7 +48,7 @@
         </div>
         <div class="bg-white shadow rounded p-6 mt-6">
             <h2 class="text-xl font-bold mb-4">Review to {{ $freelancer->name }}</h2>
-            <form action="{{ route('review.freelancer', $freelancer->id) }}" method="POST">
+            <form action="{{ route('clients.review.freelancer', $freelancer->id) }}" method="POST">
                 @csrf
                  <?php
                  $myCurrentReview = $freelancer->reviews->firstWhere(function($element)

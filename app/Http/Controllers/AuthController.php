@@ -24,7 +24,7 @@ public function login(Request $request)
         } elseif ($user->role === 'freelancer') {
             return redirect()->route('freelancer.dashboard');
         } elseif ($user->role === 'client') {
-            return redirect()->route('client.dashboard');
+            return redirect()->route('clients.dashboard');
         } else {
             return redirect()->route('home'); // Default route
         }

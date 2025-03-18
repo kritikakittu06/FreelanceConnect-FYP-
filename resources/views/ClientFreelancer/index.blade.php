@@ -23,7 +23,7 @@
                 <p class="text-gray-600">Search for the perfect freelancer for your job.</p>
             </div>
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <form method="GET" action="{{ route('freelancers.index') }}"
+                <form method="GET" action="{{ route('clients.freelancers.index') }}"
                       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
                     <input type="text" name="name" value="{{ request('name') }}"
