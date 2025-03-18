@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
+use App\Models\Project;
+use App\Models\Rating;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,17 +21,24 @@ class DatabaseSeeder extends Seeder
               'email' => 'admin@example.com',
               'role'  => UserRole::ADMIN,
          ]);
-         User::factory()->create([
+
+          User::factory()->client()->create([
              'name'  => 'Client',
              'email' => 'client@example.com',
-             'role'  => UserRole::CLIENT,
         ]);
 
-         User::factory()->freelancer()->withRandomSkills()->create([
+         $freeLancer = User::factory()->freelancer()->has(Project::factory()->count(6))->withRandomSkills()->create([
               'name'  => 'freelancer',
               'email' => 'freelancer@example.com',
               'role'  => UserRole::FREELANCER,
          ]);
-         User::factory()->freelancer()->withRandomSkills()->count(50)->create();
+         User::factory()->client()->count(10)->create()->each(function ($user) use ($freeLancer) {
+              $user->givenReviews->add(Rating::factory()->create(['freelancer_id' => $freeLancer->id]));
+         });
+
+         User::factory()->freelancer()->withRandomSkills()
+              ->has(Project::factory()->count(6))
+              ->count(50)->create();
+
     }
 }

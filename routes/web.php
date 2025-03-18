@@ -67,8 +67,9 @@ Route::middleware('auth')->group(function () {
           Route::get('/post-project/{user}', [PostProjectController::class, 'index'])->name('post.project.index');
           Route::post('/post-project', [PostProjectController::class, 'store'])->name('post.project.store');
           Route::post('/{freelancer}/review', [RatingController::class, 'reviewFreelancer'])->name('review.freelancer');
-
           Route::get('/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('freelancer.profile');
+          Route::put('/client/profile/update', [ClientProfileController::class, 'update'])->name('client.profile.update');
+
      });
 });
 // Sanjeev
@@ -111,7 +112,6 @@ Route::middleware('auth')->group(function () {
 // Route for client profile edit
 
 // Route for client profile update (submit the form)
-Route::put('/client/profile/edit', [ClientProfileController::class, 'update'])->name('client.profile.update');
 
 Route::get('/about',[AboutController::class, 'index'])->name('about');
 

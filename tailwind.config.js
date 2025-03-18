@@ -1,3 +1,5 @@
+import forms from '@tailwindcss/forms';
+
 module.exports = {
     content: [
       './resources/**/*.{html,js,php}',
@@ -12,5 +14,5 @@ module.exports = {
           },
       },
     },
-    plugins: [],
+    plugins: [forms,require('flowbite/plugin')]
   }

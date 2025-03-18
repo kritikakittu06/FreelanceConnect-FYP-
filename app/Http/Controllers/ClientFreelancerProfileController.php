@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Models\Rating;
 use App\Models\User;
+use function Pest\Laravel\get;
 
 class ClientFreelancerProfileController extends Controller
 {
@@ -14,6 +16,7 @@ class ClientFreelancerProfileController extends Controller
             ->with(['projects', 'freelanceProjects', 'reviews'])
             ->firstOrFail();
 
-        return view('clientFreelancer.profile', compact('freelancer'));
+        $allReviews = Rating::query()->with('client')->where('freelancer_id', $id)->where('rating', '>=', 4)->get();
+        return view('clientFreelancer.profile', compact('freelancer', 'allReviews'));
     }
 }

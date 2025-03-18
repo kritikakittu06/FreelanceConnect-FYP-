@@ -45,7 +45,7 @@
                     <button type="submit" class="text-gray-700 hover:text-purple-600">Logout</button>
                 </form>
                 @if(auth()->user()->isClient())
-                    <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-purple-600">
+                    <a href="{{ route('clients.profile.edit') }}" class="text-gray-700 hover:text-purple-600">
                         <i class="fas fa-user-edit"></i>
                     </a>
                 @endif

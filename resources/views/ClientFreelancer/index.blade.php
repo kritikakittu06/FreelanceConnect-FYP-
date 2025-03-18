@@ -15,7 +15,6 @@
             <a href="#freelancer-grid" class="bg-purple-600 text-white-600 px-6 py-3 rounded-full font-semibold">Post a Project</a>
         </div>
     </section>
-
     <!-- Advanced Search Section (optional, can be connected to a search controller) -->
     <section class="py-10 bg-gray-100">
         <div class="container">
@@ -27,13 +26,13 @@
                 <form method="GET" action="{{ route('freelancers.index') }}"
                       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
+                    <input type="text" name="name" value="{{ request('name') }}"
+                           placeholder="Freelancer Name" class="border border-gray-300 p-2 rounded">
+
                     <input type="text" name="skills" value="{{ request('skills') }}"
                            placeholder="Skills (e.g., PHP, React)" class="border border-gray-300 p-2 rounded">
 
-                    <input type="number" name="experience" value="{{ request('experience') }}"
-                           placeholder="Min Experience (Years)" class="border border-gray-300 p-2 rounded">
-
-                    <input type="text" name="budget" value="{{ request('budget') }}" placeholder="Max Budget "
+                    <input type="text" name="budget" value="{{ request('budget') }}" placeholder="Budget"
                            class="border border-gray-300 p-2 rounded">
 
                     <input type="text" name="location" value="{{ request('location') }}"
@@ -47,10 +46,6 @@
             </div>
         </div>
     </section>
-
-
-
-
     <!-- Freelancers Listings Section (Dynamic) -->
     <section class="py-20">
         <div class="container">
@@ -111,64 +106,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Testimonials Section (can be dynamic if you have testimonials in your database) -->
-    <section class="py-20 bg-gray-100">
-        <div class="container">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold">What Our Clients Say</h2>
-                <p class="text-gray-600">Hear from our satisfied clients.</p>
-            </div>
-            <!-- Testimonials can also be looped here dynamically if needed -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Static testimonials (or convert them to dynamic if stored in DB) -->
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <p class="text-gray-600 mb-4">"John Doe did an amazing job on our website. He was professional, timely,
-                        and delivered a high-quality product. Highly recommend!"</p>
-                    <div class="flex items-center">
-                        <img alt="Portrait of a satisfied client" class="w-10 h-10 rounded-full mr-4"
-                            src="https://storage.googleapis.com/a1aa/image/4AFXNCKdQ6IJWLHmHgolCKg1LmJ6l3CUWwYkjnXUDS8.jpg"
-                            width="40" height="40" />
-                        <div>
-                            <p class="text-gray-700 font-semibold">Client Name</p>
-                            <p class="text-gray-600 text-sm">CEO, Company</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Repeat for other testimonials... -->
-            </div>
-        </div>
-    </section>
-
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @foreach ($freelancers as $freelancer)
-            @foreach ($freelancer->reviews as $review)
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <p class="text-gray-600 mb-4">"{{ $review->review }}"</p> <!-- Display the review -->
-                    <div class="flex items-center">
-                        <!-- Display client profile image -->
-                        <img alt="Portrait of a satisfied client" class="w-10 h-10 rounded-full mr-4"
-                            src="{{ asset('storage/' . $review->client->profile_image) }}" width="40"
-                            height="40" />
-
-                        <div>
-                            <p class="text-gray-700 font-semibold">{{ $review->client->name }}</p>
-                            <p class="text-gray-600 text-sm">
-                                {{ $review->client->role == 'client' ? 'Client' : 'User' }}</p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        @endforeach
-
-
-
-    </div>
-
-    </div>
-    </section>
-
 
     <!-- Call to Action Section (static or dynamic as needed) -->
     <section class="py-20 bg-purple-600 text-white">

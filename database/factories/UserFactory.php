@@ -70,4 +70,10 @@ class UserFactory extends Factory
                'location'       => fake()->address()
           ]);
      }
+
+     public function client(): static{
+         return $this->state([
+              'role'           => UserRole::CLIENT,
+         ]);
+     }
 }

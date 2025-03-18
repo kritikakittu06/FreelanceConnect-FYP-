@@ -14,6 +14,6 @@ class RoleMiddleware
         if (Auth::check() && Auth::user()->role->value === $role) {
             return $next($request);
         }
-        return redirect('/'); // Redirect if unauthorized
+        return redirect('/')->with('toast.error', 'Unauthorized'); // Redirect if unauthorized
     }
 }

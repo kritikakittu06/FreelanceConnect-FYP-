@@ -109,4 +109,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rating::class, 'freelancer_id');
     }
+
+     public function givenReviews()
+     {
+          return $this->hasMany(Rating::class, 'user_id');
+     }
 }

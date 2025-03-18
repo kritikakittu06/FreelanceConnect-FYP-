@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Rating extends Model
 {
+     use HasFactory;
+
     protected $fillable = [
         'user_id',  // The client who gave the rating
         'freelancer_id',  // The freelancer who received the rating

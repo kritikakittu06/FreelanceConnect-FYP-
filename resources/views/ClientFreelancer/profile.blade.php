@@ -16,10 +16,10 @@
                 @endforeach
             </p>
             <p class="mb-3"><strong>Experience:</strong> {{ $freelancer->experience }} </p>
-            <p class="mb-3"><strong>Location:</strong> {{ $freelancer->location }} </p>
+            <p class="mb-3"><strong>Budget:</strong> {{ $freelancer->project_budget }} </p>
+            <p class="mb-4"><strong>Location:</strong> {{ $freelancer->location }} </p>
             <!-- Freelancer Projects Section -->
-            <div class="bg-white shadow rounded p-6 mb-3">
-                <h2 class="text-xl font-bold mb-4">Projects by {{ $freelancer->name }}</h2>
+                <h2 class="text-xl font-bold mb-3">Projects by {{ ucwords($freelancer->name) }}</h2>
                 @if ($freelancer->projects->count())
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($freelancer->projects as $project)
@@ -32,22 +32,16 @@
                                     <img src="{{ asset('storage/' . $project->images->first()->image) }}"
                                          alt="Project Image" class="w-full h-40 object-cover mt-2 rounded">
                                 @endif
-
-                                <a href="{{ route('projects.show', $project->id) }}"
-                                   class="inline-block bg-purple-500 text-white px-3 py-1 rounded mt-3 hover:bg-blue-600">
-                                    View Details
-                                </a>
                             </div>
                         @endforeach
                     </div>
                 @else
                     <p class="text-gray-500">No projects available.</p>
                 @endif
-            </div>
             @if(auth()->user()->id !== $freelancer->id)
                 <!-- Start Chat Button -->
                 <a href="{{ route('chat.index', ['otherUserId' => $freelancer->id]) }}"
-                   class="inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                   class="inline-block bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-blue-700">
                     Start Chat
                 </a>
             @endif
@@ -98,5 +92,36 @@
                 </button>
             </form>
         </div>
+        <div class="bg-white pb-24 pt-5">
+            <div class="px-6 lg:px-8">
+                <div class="text-center">
+                    <p class="mt-2 text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Review From Previous Clients</p>
+                </div>
+                <div class="mt-10 flow-root lg:mx-0 lg:max-w-none">
+                    <div class="-mt-8 sm:-mx-4 sm:columns-2 sm:text-[0] lg:columns-3">
+                        @foreach($allReviews as $reviewObj)
+                            <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
+                                <figure class="rounded-2xl bg-gray-50 p-8 text-sm/6">
+                                    <blockquote class="text-gray-900">
+                                        <p>{{$reviewObj->review}}</p>
+                                    </blockquote>
+                                    <figcaption class="mt-6 flex items-center gap-x-4">
+                                        <?php
+                                          $profileImg = $reviewObj->client->profile_image ? asset('storage/' . $reviewObj->client->profile_image) :  asset('images/default-avatar.png')
+                                          ?>
+                                        <img class="size-10 rounded-full bg-gray-50" src="{{$profileImg}}" alt="">
+                                        <div>
+                                            <div class="font-semibold text-gray-900">{{ucwords($reviewObj->client->name)}}</div>
+                                            <div class="text-gray-600">{{$reviewObj->client->email}}</div>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 @endsection
