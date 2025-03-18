@@ -62,12 +62,12 @@ Route::middleware('auth')->group(function () {
      Route::middleware('role:client')->group(function () {
           Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
           Route::get('/client/freelancers', [ClientFreelancerController::class, 'index'])->name('freelancers.index');
-          Route::get('paypal', [PaymentController::class, 'index'])->name('payment.index');
+          Route::get('client/post-projects', [PostProjectController::class, 'index'])->name('clients.post-projects');
+          Route::get('client/post-project/{user}/create', [PostProjectController::class, 'create'])->name('clients.post-project.create');
           Route::get('profile/edit', [ClientProfileController::class, 'edit'])->name('clients.profile.edit');
-          Route::get('/post-project/{user}', [PostProjectController::class, 'index'])->name('post.project.index');
           Route::post('/post-project', [PostProjectController::class, 'store'])->name('post.project.store');
           Route::post('/{freelancer}/review', [RatingController::class, 'reviewFreelancer'])->name('review.freelancer');
-          Route::get('/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('freelancer.profile');
+          Route::get('/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('clients.freelancer.profile');
           Route::put('/client/profile/update', [ClientProfileController::class, 'update'])->name('client.profile.update');
 
      });

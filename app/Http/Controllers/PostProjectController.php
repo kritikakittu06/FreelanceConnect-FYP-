@@ -9,7 +9,21 @@ use App\Models\PostProject;
 
 class PostProjectController extends Controller
 {
-     public function index(User $user)
+     public function index(Request $request)
+     {
+          $query = PostProject::query()
+               ->with(['freelancer'])
+               ->where('client_id', auth()->user()->id)
+               ->when($request->filled('status'), function($query) use ($request) {
+                    return $query->where('status', $request->status);
+               });
+
+          $allPostProjects = $query->paginate(9);
+
+          return view('front.clients.projects', compact('allPostProjects'));
+     }
+
+     public function create(User $user)
      {
           if(!$user->isFreelancer()){
                abort(403);
@@ -37,7 +51,7 @@ class PostProjectController extends Controller
                'deadline'            => $request->deadline,
           ]);
 
-          return redirect()->route('freelancer.profile', $request->freelancer_id)->with('toast.success', 'Project posted successfully!');
+          return redirect()->route('clients.freelancer.profile', $request->freelancer_id)->with('toast.success', 'Project posted successfully!');
 
      }
 

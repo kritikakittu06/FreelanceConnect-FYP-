@@ -27,7 +27,7 @@
                       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
                     <input type="text" name="name" value="{{ request('name') }}"
-                           placeholder="Freelancer Name" class="border border-gray-300 p-2 rounded">
+                           placeholder="Freelancer Name" class="border border-gray-300 p-2 rounded" autocomplete="off">
 
                     <input type="text" name="skills" value="{{ request('skills') }}"
                            placeholder="Skills (e.g., PHP, React)" class="border border-gray-300 p-2 rounded">
@@ -93,7 +93,7 @@
                             <!-- Rating display -->
                         </div>
                         <span class="flex justify-center text-gray-500 text-xs">({{ number_format($averageRating, 1) }} from {{ $totalRatings }} ratings)</span>
-                        <a href="{{ route('freelancer.profile', ['id' => $freelancer->id]) }}"
+                        <a href="{{ route('clients.freelancer.profile', ['id' => $freelancer->id]) }}"
                             class="text-purple-600 font-semibold block text-center mt-4">
                             View Profile
                         </a>

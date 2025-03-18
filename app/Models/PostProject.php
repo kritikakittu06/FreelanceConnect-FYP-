@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PostProject extends Model
 {
-    protected $fillable = ['freelancer_id', 'client_id', 'project_name', 'project_description', 'budget', 'deadline', 'paid_amount', 'status'];
+    use HasFactory;
+
+    protected $fillable = ['freelancer_id', 'client_id', 'project_name', 'project_description', 'budget', 'deadline', 'status'];
 
     public function freelancer() : BelongsTo
     {

@@ -20,7 +20,6 @@ return new class extends Migration {
                 $table->date('deadline');
                 $table->string('status');
                 $table->timestamps();
-                $table->float('paid_amount')->nullable();
                 $table->foreign('freelancer_id')->references('id')->on('users')->onDelete('cascade');
                  $table->foreign('client_id')->references('id')->on('users')->onDelete('cascade');
 

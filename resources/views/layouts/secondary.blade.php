@@ -29,8 +29,8 @@
             </a>
             @auth
                 @if(auth()->user()->isClient())
-                    <a class="text-gray-700 hover:text-purple-600" href="{{ route('payment.index') }}">
-                        Pricing
+                    <a class="text-gray-700 hover:text-purple-600" href="{{ route('clients.post-projects') }}">
+                        Projects
                     </a>
                 @endif
             @endauth
