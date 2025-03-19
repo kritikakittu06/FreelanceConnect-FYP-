@@ -16,7 +16,7 @@
             <div class="p-4 h-96 overflow-y-auto bg-gray-100" id="chat-box">
                 @foreach ($messages as $message)
                     <div id="message-{{ $message->id }}"
-                        class="flex {{ $message->sender_id == Auth::id() ? 'justify-end' : 'justify-start' }} my-2">
+                        class="flex {{ $message->sender_id ==auth()->user()->isClient() ? 'justify-end' : 'justify-start' }} my-2">
                         <div class="relative group">
                             @if ($message->sender_id == Auth::id())
                                 <div
