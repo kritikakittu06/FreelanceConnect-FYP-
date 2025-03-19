@@ -1,6 +1,9 @@
 <x-guest-layout>
-    <div class="w-full max-w-md p-12 bg-black bg-opacity-70 rounded-lg shadow-md text-white">
-        <h2 class="text-2xl font-semibold text-center text-400">
+    <div class="min-h-screen min-w-[400px] flex items-center justify-center">
+        <div class="bg-black w-full bg-opacity-70 rounded-lg shadow-lg p-8">
+
+
+        <h2 class="text-2xl font-semibold text-center text-400 text-white">
             Forgot Password?
         </h2>
         <p class="text-sm text-gray-300 text-center mt-2">
@@ -29,7 +32,7 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <x-primary-button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-300">
+                <x-primary-button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-300 justify-center">
                     {{ __('Email Password Reset Link') }}
                 </x-primary-button>
             </div>
@@ -40,5 +43,6 @@
                 Back to Login
             </a>
         </div>
+    </div>
     </div>
 </x-guest-layout>

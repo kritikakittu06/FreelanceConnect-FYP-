@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (Auth::check() && Auth::user()->role->value === $role) {
+        if (Auth::check() && in_array(Auth::user()->role->value, $roles)) {
             return $next($request);
         }
         return redirect('/')->with('toast.error', 'Unauthorized'); // Redirect if unauthorized

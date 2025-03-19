@@ -1,12 +1,9 @@
-@extends('layouts.admin')
-
-@section('title', 'Manage Users')
-
-@section('content')
+<x-app-layout>
     <div class="container mx-auto px-4 py-6">
-        <h1 class="text-3xl font-bold mb-4">Manage Users</h1>
+        <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold">Manage Users</h1>
         <a href="{{ route('admin.users.create') }}" class="bg-green-600 text-white px-4 py-2 rounded">Add New User</a>
-
+        </div>
         <table class="min-w-full mt-4">
             <thead>
                 <tr>
@@ -21,18 +18,25 @@
                     <tr>
                         <td class="py-2 px-4 border">{{ $user->name }}</td>
                         <td class="py-2 px-4 border">{{ $user->email }}</td>
-                        <td class="py-2 px-4 border">{{ $user->role }}</td>
+                        <td class="py-2 px-4 border">{{ $user->role->label() }}</td>
                         <td class="py-2 px-4 border">
-                            <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600">Edit</a> |
-                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" style="display:inline;">
+                            @if(!$user->isAdmin())
+                            <a href="{{ route('admin.users.edit', $user) }}" class=" bg-blue-600 text-white px-4 py-2 rounded inline-block leading-4">Edit</a>
+                            @endif
+                            @if(auth()->user()->id !== $user->id && !$user->isAdmin())
+                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600">Delete</button>
+                                <button type="submit" class="bg-red-600 text-white px-4 py-1 rounded">Delete</button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{$users->links()}}
+        </div>
     </div>
-@endsection
+</x-app-layout>

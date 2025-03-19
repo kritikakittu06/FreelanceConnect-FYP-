@@ -1,7 +1,6 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center bg-cover bg-center"
-        style="background-image: url('https://example.com/your-background-image.jpg');">
-        <div class="bg-black bg-opacity-70 rounded-lg shadow-lg p-8 w-[600px]">
+    <div class="min-h-screen min-w-[500px] flex items-center justify-center">
+        <div class="bg-black w-full bg-opacity-70 rounded-lg shadow-lg p-8">
 
             <!-- Login Form Header -->
             <h2 class="text-3xl font-bold text-center text-white mb-6">{{ __('LOGIN') }}</h2>

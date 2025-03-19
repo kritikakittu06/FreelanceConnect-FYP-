@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AdminPaymentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -37,25 +38,31 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
      Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
+     Route::middleware('role:admin,freelancer')->group(function () {
+          Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+          Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+          Route::put('/profile/update-image', [ProfileController::class, 'updateImage'])->name('profile.update-image');
+     });
+
      Route::middleware('role:admin')->group(function () {
           Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
           Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
           Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
-          Route::get('/admin/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
-          Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
+          Route::post('/admin/users/store', [UserController::class, 'store'])->name('admin.users.store');
+          Route::get('/admin/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+          Route::put('/admin/users/{user}/edit', [UserController::class, 'update'])->name('admin.users.update');
+          Route::delete('admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+          Route::get('/admin/payments', [AdminPaymentController::class, 'index'])->name('admin.payments.index');
      });
 
      Route::middleware('role:freelancer')->group(function () {
           Route::get('/freelancer/dashboard', [FreelancerDashboardController::class, 'index'])->name('freelancer.dashboard');
-          Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
           Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
           Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
           Route::post('/projects', [ProjectController::class, 'store'])->name('project.store');
           Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
           Route::get('/projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
           Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
-          Route::put('/profile/update-image', [ProfileController::class, 'updateImage'])->name('profile.update-image');
-          Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
      });
 
@@ -170,14 +177,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
 });
-
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/dashboard', [FreelancerDashboardController::class, 'index'])->name('dashboard');
-//     Route::get('/job-offer/{id}', [JobOfferController::class, 'show'])->name('job.offer');
-//     Route::resource('project', ProjectController::class);
-//     Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.view');
-// });
-
 
 
 require __DIR__.'/auth.php';

@@ -8,31 +8,22 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
-public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+     public function login(Request $request)
+     {
+          $credentials = $request->validate([
+               'email'    => 'required|email',
+               'password' => 'required',
+          ]);
 
-    if (Auth::attempt($credentials)) {
-        $user = Auth::user(); // Get the authenticated user
+          if( Auth::attempt($credentials) )
+          {
+               $defaultRoute = auth()->user()->getDefaultRoute();
+               return redirect()->to($defaultRoute);
+          }
 
-        // Redirect based on user role
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'freelancer') {
-            return redirect()->route('freelancer.dashboard');
-        } elseif ($user->role === 'client') {
-            return redirect()->route('clients.dashboard');
-        } else {
-            return redirect()->route('home'); // Default route
-        }
-    }
-
-    return back()->withErrors([
-        'email' => 'Invalid credentials.',
-    ]);
-}
+          return back()->withErrors([
+               'email' => 'Invalid credentials.',
+          ]);
+     }
 
 }

@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="flex h-screen">
+    <div class="flex">
         <!-- Main Content -->
         <div class="flex-grow p-6 overflow-y-auto">
             <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
@@ -37,7 +37,7 @@
                     <h3 class="text-2xl font-semibold" style="color: #7F55E0; margin-bottom: 24px;">Update Password</h3>
                     @include('profile.partials.update-password-form')
                 </div>
-
+@if(auth()->user()->isFreelancer())
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-8">
                     <h3 class="text-2xl font-semibold" style="color: #7F55E0; margin-bottom: 24px;">Additional Information</h3>
                     <section>
@@ -85,6 +85,7 @@
                         </form>
                     </section>
                 </div>
+@endif
             </div>
         </div>
     </div>
