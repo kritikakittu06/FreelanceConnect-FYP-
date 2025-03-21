@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Enums\UserRole;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,6 @@ class ChatController extends Controller
     public function index($otherUserId)
     {
         $userId = Auth::id();
-
         // Fetch all messages between the authenticated user and the other user
         $messages = ChatMessage::where(function ($q) use ($userId, $otherUserId) {
             $q->where('sender_id', $userId)
@@ -30,7 +30,9 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('chat.index', compact('messages', 'otherUserId'));
+        $otherUser = User::query()->where('role', UserRole::FREELANCER)->where('id',$otherUserId)->firstOrFail();
+
+        return view('chat.index', compact('messages', 'otherUser'));
     }
 
     // Fetch messages via AJAX (if you want to poll for new messages)
@@ -154,7 +156,9 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
+        $otherUser = User::query()->where('id',$otherUserId)->firstOrFail();
+
         // Pass the messages and the other user's ID to the freelancer chat view
-        return view('chat.freelancer_chat', compact('messages', 'otherUserId'));
+        return view('chat.freelancer_chat', compact('messages', 'otherUser'));
     }
 }

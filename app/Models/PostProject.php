@@ -19,6 +19,12 @@ class PostProject extends Model
         return $this->belongsTo(User::class, 'freelancer_id');
     }
 
+    public function client() : BelongsTo
+{
+    return $this->belongsTo(User::class, 'client_id');
+}
+
+
      protected $casts = [
           'deadline' => 'date',
           'status' => PostProjectStatus::class

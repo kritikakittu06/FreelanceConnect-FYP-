@@ -25,7 +25,7 @@ class ClientFreelancerController extends Controller
          }
 
          if ($request->filled('budget')) {
-              $query->where('budget', 'LIKE', '%' . $request->budget . '%');
+              $query->where('project_budget', 'LIKE', '%' . $request->budget . '%');
          }
 
         if ($request->filled('location')) {

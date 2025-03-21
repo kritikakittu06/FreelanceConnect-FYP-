@@ -64,6 +64,10 @@ Route::middleware('auth')->group(function () {
           Route::get('/projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
           Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
 
+          Route::get('/clientprojects', [ClientController::class, 'index'])->name('freelancer.projects');
+        Route::post('/clientprojects/{id}/accept', [clientController::class, 'accept'])->name('freelancer.projects.accept');
+        Route::post('/clientprojects/{id}/reject', [clientController::class, 'reject'])->name('freelancer.projects.reject');
+
      });
 
      Route::middleware('role:client')->group(function () {
@@ -146,6 +150,8 @@ Route::middleware('auth')->group(function () {
 
 // Also Admin ?
 Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('clients.index');
+Route::get('/clients/{id}', [ClientController::class, 'showProfile'])->name('clients.profile');
+
 Route::get('/dashboard/clients/create', [ClientController::class, 'create'])->name('clients.create');
 Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('clients.store');
 Route::get('/dashboard/clients/{client}', [ClientController::class, 'show'])->name('clients.show');

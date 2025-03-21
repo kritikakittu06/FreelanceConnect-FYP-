@@ -2,73 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
-use App\Models\Note;
 use Illuminate\Http\Request;
+use App\Models\PostProject;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::all();
-        return view('clients.index', compact('clients'));
+        $freelancerId = Auth::id();
+
+        $projects = PostProject::where('freelancer_id', $freelancerId)
+            ->where('status', 'pending') // Only show unaccepted projects
+            ->get();
+
+        return view('clients.index', compact('projects'));
     }
 
-    public function create()
+    public function accept($id)
     {
-        return view('clients.create');
+        $project = PostProject::where('id', $id)
+            ->where('freelancer_id', Auth::id())
+            ->firstOrFail();
+
+        $project->update(['status' => 'accepted']);
+
+        return redirect()->route('freelancer.projects')->with('success', 'Project accepted successfully!');
     }
 
-    public function store(Request $request)
+    public function reject($id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'required|string|max:15',
-            'address' => 'required|string|max:255',
-        ]);
+        $project = PostProject::where('id', $id)
+            ->where('freelancer_id', Auth::id())
+            ->firstOrFail();
 
-        $client = Client::updateOrCreate(
-            ['email' => $request->email], // Match by email
-            $request->all()               // Update with the rest of the data
-        );
+        $project->update(['status' => 'rejected']);
 
-        return redirect()->route('clients.index')->with('success', 'Client added or updated successfully!');
-    }
-    public function show(Client $client)
-    {
-        return view('clients.show', compact('client'));
+        return redirect()->route('freelancer.projects')->with('error', 'Project rejected.');
     }
 
-    public function edit(Client $client)
-    {
-        return view('clients.edit', compact('client'));
-    }
 
-    public function update(Request $request, Client $client)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-        ]);
-
-        $client->update($request->all());
-        return redirect()->route('clients.index')->with('success', 'Client updated successfully.');
-    }
-
-    public function destroy(Client $client)
-    {
-        $client->delete();
-        return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');
-    }
-
-    public function addNote(Request $request, Client $client)
-    {
-        $request->validate(['content' => 'required|string|max:1000']);
-
-        $client->notes()->create(['content' => $request->input('content')]);
-        return back()->with('success', 'Note added successfully.');
-    }
 }
