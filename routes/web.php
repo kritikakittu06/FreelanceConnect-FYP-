@@ -73,6 +73,8 @@ Route::middleware('auth')->group(function () {
      Route::middleware('role:client')->group(function () {
           Route::get('client/dashboard', [ClientDashboardController::class, 'index'])->name('clients.dashboard');
           Route::get('client/freelancers', [ClientFreelancerController::class, 'index'])->name('clients.freelancers.index');
+          Route::get('/recommend-freelancers', [ClientFreelancerController::class, 'recommendFreelancers'])->name('recommend.freelancers');
+
           Route::get('client/freelancer/profile/{id}', [ClientFreelancerProfileController::class, 'show'])->name('clients.freelancer.profile');
           Route::get('client/post-projects', [PostProjectController::class, 'index'])->name('clients.post-projects');
           Route::get('client/post-projects/{id}/show', [PostProjectController::class, 'show'])->name('clients.post-projects.show');

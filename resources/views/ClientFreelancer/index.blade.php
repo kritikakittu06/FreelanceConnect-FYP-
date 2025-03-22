@@ -1,5 +1,6 @@
 @php
     use Illuminate\Support\Str;
+
 @endphp
 @extends('layouts.secondary')
 @section('content')
@@ -12,7 +13,8 @@
             <h1 class="text-4xl text-purple-600 font-bold mb-4">Find the Best Freelancers for Your Projects</h1>
             <p class="text-lg text-purple-600 mb-8">Browse through our talented freelancers and find the right fit for your
                 project needs.</p>
-            <a href="#freelancer-grid" class="bg-purple-600 text-white-600 px-6 py-3 rounded-full font-semibold">Post a Project</a>
+            <a href="#freelancer-grid" class="bg-purple-600 text-white-600 px-6 py-3 rounded-full font-semibold">Post a
+                Project</a>
         </div>
     </section>
     <!-- Advanced Search Section (optional, can be connected to a search controller) -->
@@ -24,19 +26,19 @@
             </div>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <form method="GET" action="{{ route('clients.freelancers.index') }}"
-                      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-                    <input type="text" name="name" value="{{ request('name') }}"
-                           placeholder="Freelancer Name" class="border border-gray-300 p-2 rounded" autocomplete="off">
+                    <input type="text" name="name" value="{{ request('name') }}" placeholder="Freelancer Name"
+                        class="border border-gray-300 p-2 rounded" autocomplete="off">
 
                     <input type="text" name="skills" value="{{ request('skills') }}"
-                           placeholder="Skills (e.g., PHP, React)" class="border border-gray-300 p-2 rounded">
+                        placeholder="Skills (e.g., PHP, React)" class="border border-gray-300 p-2 rounded">
 
                     <input type="text" name="budget" value="{{ request('budget') }}" placeholder="Budget"
-                           class="border border-gray-300 p-2 rounded">
+                        class="border border-gray-300 p-2 rounded">
 
                     <input type="text" name="location" value="{{ request('location') }}"
-                           placeholder="Location (e.g., New York)" class="border border-gray-300 p-2 rounded">
+                        placeholder="Location (e.g., New York)" class="border border-gray-300 p-2 rounded">
 
                     <!-- Button spans all columns and is centered -->
                     <div class="col-span-1 md:col-span-2 md:col-start-2 flex justify-center">
@@ -46,6 +48,75 @@
             </div>
         </div>
     </section>
+
+
+<!-- Recommended Freelancers Section -->
+<section class="py-9 bg-gradient-to-r from-purple-100 to-purple-50">
+    <div class="container">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-extrabold text-purple-700">⭐ Recommended Freelancers</h2>
+            <p class="text-lg text-gray-700">Based on ratings and expertise</p>
+        </div>
+
+        <!-- Scrollable Container -->
+        <div class="relative">
+            <button id="scroll-left" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-purple-600 text-white px-3 py-2 rounded-full shadow-md">
+                ❮
+            </button>
+
+            <div id="carousel-container" class="flex gap-6 overflow-x-auto whitespace-nowrap scroll-smooth p-1">
+                @foreach ($recommendedFreelancers as $freelancer)
+                    <div class="min-w-[300px] bg-white p-6 rounded-lg shadow-lg border-2 border-yellow-400 hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 right-3 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">Top Rated</span>
+
+                        <img alt="{{ $freelancer->name }}'s Profile Picture"
+                             class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-yellow-400 shadow-md"
+                             src="{{ $freelancer->profile_image ? asset('storage/' . $freelancer->profile_image) : asset('images/default-avatar.png') }}"
+                             width="128" height="128" />
+
+                        <h3 class="text-2xl font-semibold text-center text-purple-800">{{ $freelancer->name }}</h3>
+                        <p class="text-gray-600 text-center mb-4">Freelancer</p>
+
+                        <div class="flex flex-wrap justify-center gap-2 mb-4">
+                            @foreach (explode(',', $freelancer->skills) as $skill)
+                                <span class="bg-purple-200 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+                                    {{ trim($skill) }}
+                                </span>
+                            @endforeach
+                        </div>
+
+                        <a href="{{ route('clients.freelancer.profile', ['id' => $freelancer->id]) }}"
+                           class="block bg-purple-600 text-white font-semibold text-center py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                            View Profile
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+
+            <button id="scroll-right" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-purple-600 text-white px-3 py-2 rounded-full shadow-md">
+                ❯
+            </button>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.getElementById("carousel-container");
+        const scrollLeft = document.getElementById("scroll-left");
+        const scrollRight = document.getElementById("scroll-right");
+
+        scrollLeft.addEventListener("click", function() {
+            container.scrollBy({ left: -300, behavior: "smooth" });
+        });
+
+        scrollRight.addEventListener("click", function() {
+            container.scrollBy({ left: 300, behavior: "smooth" });
+        });
+    });
+</script>
+
+
+
     <!-- Freelancers Listings Section (Dynamic) -->
     <section class="py-20">
         <div class="container">
@@ -72,7 +143,7 @@
 
                         <div class="flex justify-center items-center mb-2">
                             @php
-                                $averageRating = round($freelancer->reviews_avg_rating,2);
+                                $averageRating = round($freelancer->reviews_avg_rating, 2);
                                 $totalRatings = $freelancer->reviews_count;
                                 $fullStars = floor($averageRating);
                                 $halfStar = $averageRating - $fullStars >= 0.5;
@@ -92,7 +163,8 @@
                             @endfor
                             <!-- Rating display -->
                         </div>
-                        <span class="flex justify-center text-gray-500 text-xs">({{ number_format($averageRating, 1) }} from {{ $totalRatings }} ratings)</span>
+                        <span class="flex justify-center text-gray-500 text-xs">({{ number_format($averageRating, 1) }}
+                            from {{ $totalRatings }} ratings)</span>
                         <a href="{{ route('clients.freelancer.profile', ['id' => $freelancer->id]) }}"
                             class="text-purple-600 font-semibold block text-center mt-4">
                             View Profile
@@ -113,8 +185,8 @@
             <h2 class="text-3xl font-bold mb-4">Ready to Get Started?</h2>
             <p class="text-lg mb-8">Post your project today and find the perfect freelancer to bring your ideas to life.
             </p>
-            <a href="#freelancer-grid" class="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold">Post a Project</a>
+            <a href="#freelancer-grid" class="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold">Post a
+                Project</a>
         </div>
     </section>
 @endsection
-

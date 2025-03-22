@@ -16,7 +16,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 10h18M3 6h18M3 14h18m-9 4h9"></path>
         </svg>
-        <span class="ml-2">Project Proposals</span>
+        <span class="ml-2">clients Proposals</span>
     </a>
 </li>
 <li>

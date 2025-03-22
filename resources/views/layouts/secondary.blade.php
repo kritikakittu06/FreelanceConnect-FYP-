@@ -9,6 +9,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     @stack('styles')
+
+  
+
 </head>
 <body class="font-sans bg-gray-100">
 <header class="bg-white shadow">
