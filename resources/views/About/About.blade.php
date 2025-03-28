@@ -1,3 +1,7 @@
+@php
+    $teamMembers = App\Models\TeamMember::all();
+@endphp
+
 @extends('layouts.secondary')
 
 @section('title', 'About Us - Freelance Connect')
@@ -11,12 +15,11 @@
         </video>
     </div>
     <div class="relative z-10 container mx-auto px-4 text-center">
-        <h1 class="text-4xl font-bold mb-4">About Freelance Connect</h1>
-        <p class="text-lg mb-8">Connecting clients with top freelancers from around the world, enabling creativity and collaboration.</p>
+        <h1 class="text-4xl font-bold mb-4 text-black">About Freelance Connect</h1>
+        <p class="text-lg mb-8 text-black">Connecting clients with top freelancers from around the world, enabling creativity and collaboration.</p>
     </div>
 </section>
 
-<!-- About Us Section with More Content -->
 <section class="py-20 bg-gray-100">
     <div class="container mx-auto px-4">
         <!-- Section Heading -->
@@ -25,15 +28,11 @@
             <p class="text-xl text-gray-700">We bridge the gap between businesses and top freelancers from around the world, enabling seamless collaboration for exceptional results.</p>
         </div>
 
-        <!-- Split Layout with Video -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Left Side: Freelance Video -->
-            <div class="relative">
-                <video autoplay muted loop class="w-full h-full object-cover rounded-lg shadow-lg">
-                    <source src="https://www.pexels.com/video/a-woman-scrolling-for-pictures-in-a-laptop-3627320/" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <div class="absolute top-0 left-0 w-full h-full bg-black opacity-40 rounded-lg"></div>
+        <!-- Split Layout with Image -->
+        <div class="grid grid-cols-1 md:grid-cols-2  items-center">
+            <!-- Left Side: Freelance Image -->
+            <div class="relative flex justify-center w-full">
+                <img src="https://i.pinimg.com/474x/ee/14/e1/ee14e135e9c0cd7dd51d1057d92fe129.jpg">
             </div>
 
             <!-- Right Side: Text Content -->
@@ -46,27 +45,19 @@
                 <!-- Bullet Points for Key Features -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-blue-600 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5h6M9 12h6m-6 7h6" />
-                        </svg>
+                        <span class="bg-blue-600 text-white p-2 rounded-full mr-3"><i class="fas fa-users"></i></span>
                         <p class="text-gray-600">Access a global pool of top talent</p>
                     </div>
                     <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-blue-600 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5h6M9 12h6m-6 7h6" />
-                        </svg>
+                        <span class="bg-blue-600 text-white p-2 rounded-full mr-3"><i class="fas fa-globe"></i></span>
                         <p class="text-gray-600">Collaborate in real-time across borders</p>
                     </div>
                     <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-blue-600 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5h6M9 12h6m-6 7h6" />
-                        </svg>
+                        <span class="bg-blue-600 text-white p-2 rounded-full mr-3"><i class="fas fa-tasks"></i></span>
                         <p class="text-gray-600">Flexible project and contract management</p>
                     </div>
                     <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-blue-600 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5h6M9 12h6m-6 7h6" />
-                        </svg>
+                        <span class="bg-blue-600 text-white p-2 rounded-full mr-3"><i class="fas fa-laptop-house"></i></span>
                         <p class="text-gray-600">Work from anywhere, anytime</p>
                     </div>
                 </div>
@@ -76,18 +67,17 @@
 </section>
 
 
+
 <!-- Our Team Section with Interactive Hover Effects -->
 <section class="py-16">
-    <div class="container mx-auto px-4 text-center mb-12">
+    <div class="container mx-auto text-center">
         <h2 class="text-3xl font-bold mb-4">Meet Our Team</h2>
-        <p class="text-gray-600 mb-8">A passionate and diverse team of professionals working to make Freelance Connect the best platform for freelancers and clients.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach ($teamMembers as $member)
-                <div class="bg-white p-6 rounded-lg shadow-md text-center hover:scale-105 transition-transform duration-300">
-                    <img src="{{ $member['image'] }}" alt="Portrait of {{ $member['name'] }}" class="w-24 h-24 rounded-full mx-auto mb-4">
-                    <h3 class="text-xl font-semibold mb-2">{{ $member['name'] }}</h3>
-                    <p class="text-gray-600 mb-2">{{ $member['role'] }}</p>
-                    <p class="text-gray-600">{{ $member['description'] }}</p>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:scale-105 transition duration-300">
+                    <img src="{{ asset('storage/' . $member->image) }}" alt="{{ $member->name }}" class="w-24 h-24 rounded-full mx-auto mb-4">
+                    <h3 class="text-xl font-semibold mb-2">{{ $member->name }}</h3>
+                    <p class="text-gray-600">{{ $member->role }}</p>
                 </div>
             @endforeach
         </div>

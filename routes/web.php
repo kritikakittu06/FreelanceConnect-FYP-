@@ -22,6 +22,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\PostProjectController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Admin\TeamMemberController;
 
 
 // Open Routes
@@ -47,12 +48,24 @@ Route::middleware('auth')->group(function () {
      Route::middleware('role:admin')->group(function () {
           Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
           Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+
           Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
           Route::post('/admin/users/store', [UserController::class, 'store'])->name('admin.users.store');
           Route::get('/admin/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
           Route::put('/admin/users/{user}/edit', [UserController::class, 'update'])->name('admin.users.update');
           Route::delete('admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
           Route::get('/admin/payments', [AdminPaymentController::class, 'index'])->name('admin.payments.index');
+         Route::prefix('admin')->group(function () {
+            Route::resource('team', TeamMemberController::class)->names([
+                'index' => 'admin.team.index',
+                'create' => 'team.create',
+                'store' => 'team.store',
+                'edit' => 'team.edit',
+                'update' => 'team.update',
+                'destroy' => 'team.destroy',
+            ]);
+});
+
      });
 
      Route::middleware('role:freelancer')->group(function () {

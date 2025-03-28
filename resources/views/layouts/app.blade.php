@@ -21,7 +21,19 @@
             <!-- Sidebar -->
             <div class="w-64 bg-[#7F55E0] text-white flex flex-col min-h-screen">
                 <div class="py-6 px-4">
-                    <a href="{{route('welcome')}}" class="text-2xl font-bold">Freelancer</a>
+                    <a href="{{ route('welcome') }}" class="text-2xl font-bold">
+                        @auth
+                            @if(auth()->user()->isAdmin())
+                                Admin
+                            @elseif(auth()->user()->isFreelancer())
+                                Freelancer
+                            @else
+                                Dashboard
+                            @endif
+                        @else
+                            Dashboard
+                        @endauth
+                    </a>
                 </div>
                 <nav class="flex-grow">
                     <ul class="space-y-2 px-4">
