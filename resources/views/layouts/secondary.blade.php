@@ -10,7 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     @stack('styles')
 
-  
+
 
 </head>
 <body class="font-sans bg-gray-100">
@@ -29,6 +29,9 @@
             @endauth
             <a class="text-gray-700 hover:text-purple-600" href="{{route('about')}}">
                 Why FreelanceConnect
+            </a>
+            <a class="text-gray-700 hover:text-purple-600" href="{{route('contact.index')}}">
+                Contact Us
             </a>
             @auth
                 @if(auth()->user()->isClient())

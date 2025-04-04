@@ -173,3 +173,48 @@
         </form>
     </div>
 </x-app-layout> --}}
+<div class="message-list">
+    @foreach($messages as $message)
+        <div class="message-item" onclick="window.location='{{ route('chat.show', ['user' => $message->sender_id]) }}'">
+            <h3>{{ $message->sender->name }}</h3>
+            <p>{{ $message->body }}</p>
+        </div>
+    @endforeach
+</div>
+
+        </div>
+    </div>
+</body>
+</html>
+</x-app-layout>
+{{-- <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Messages') }}
+        </h2>
+    </x-slot>
+
+    <div class="p-6">
+        <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Your Messages</h3>
+
+        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg h-full overflow-y-auto">
+            @foreach ($messages as $message)
+                <div class="mb-4">
+                    <div class="flex items-start mb-2">
+                        <div class="{{ $message->sender_id == auth()->id() ? 'bg-gray-300 dark:bg-gray-700' : 'bg-blue-500 text-white' }} p-2 rounded-lg max-w-xs">
+                            <p class="text-sm">{{ $message->body }}</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-500">{{ $message->sender->name }}</span>
+                </div>
+            @endforeach
+        </div>
+
+        <form action="{{ route('messages.store') }}" method="POST" class="mt-4">
+            @csrf
+            <textarea name="body" class="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-700" rows="2" placeholder="Type your message..."></textarea>
+            <input type="hidden" name="receiver_id" value="1"> <!-- Set receiver_id dynamically -->
+            <button class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">Send</button>
+        </form>
+    </div>
+</x-app-layout> --}}

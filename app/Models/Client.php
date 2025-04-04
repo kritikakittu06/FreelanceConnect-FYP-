@@ -15,4 +15,8 @@ class Client extends Model
     {
         return $this->hasMany(Note::class);
     }
+
+    public function messages() {
+        return $this->hasMany(ChatMessage::class, 'receiver_id');
+    }
 }

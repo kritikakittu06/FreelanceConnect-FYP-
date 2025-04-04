@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Events\MessageSent;
+use App\Models\Client;
 
 
 class ChatController extends Controller
@@ -140,11 +141,36 @@ class ChatController extends Controller
 
     // app/Http/Controllers/ChatController.php
 
-    public function freelancerChat($otherUserId)
-    {
-        $userId = Auth::id();
+    public function freelancerChat($otherUserId = null)
+{
+    $userId = Auth::id();
 
-        // Fetch all messages between the authenticated freelancer and the client
+    // Fetch all clients who have messaged the freelancer
+    $clients = User::where('role', UserRole::CLIENT)
+        ->whereHas('sentMessages', function ($query) use ($userId) {
+            $query->where('receiver_id', $userId);
+        })
+        ->orWhereHas('receivedMessages', function ($query) use ($userId) {
+            $query->where('sender_id', $userId);
+        })
+        ->with(['sentMessages' => function ($query) use ($userId) {
+            $query->where('receiver_id', $userId)
+                ->orWhere('sender_id', $userId)
+                ->orderBy('created_at', 'desc')
+                ->take(1); // Get the latest message
+        }])
+        ->get();
+
+    // If no otherUserId is provided (e.g., first load), select the first client
+    if (!$otherUserId && $clients->isNotEmpty()) {
+        $otherUserId = $clients->first()->id;
+    }
+
+    $messages = collect(); // Empty collection by default
+    $otherUser = null;
+
+    if ($otherUserId) {
+        // Fetch messages between the freelancer and the selected client
         $messages = ChatMessage::where(function ($q) use ($userId, $otherUserId) {
             $q->where('sender_id', $userId)
                 ->where('receiver_id', $otherUserId);
@@ -156,9 +182,10 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $otherUser = User::query()->where('id',$otherUserId)->firstOrFail();
-
-        // Pass the messages and the other user's ID to the freelancer chat view
-        return view('chat.freelancer_chat', compact('messages', 'otherUser'));
+        // Fetch the selected client
+        $otherUser = User::where('id', $otherUserId)->firstOrFail();
     }
+
+    return view('chat.freelancer_chat', compact('messages', 'otherUser', 'clients'));
+}
 }

@@ -23,6 +23,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\PostProjectController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\ContactController;
 
 
 // Open Routes
@@ -131,9 +132,9 @@ Route::post('/messages', function (Illuminate\Http\Request $request) {
 
 Route::middleware('auth')->group(function () {
     // Freelancer's Chat Interface (Freelancer side)
-    Route::get('/freelancer/chat/{otherUserId}', [ChatController::class, 'freelancerChat'])->name('freelancer.chat');
+    Route::get('/freelancer/chat/{otherUserId?}', [ChatController::class, 'freelancerChat'])->name('freelancer.chat');
 
-    // You can keep the same routes for fetching messages and sending messages
+    // Routes for fetching messages and sending messages
     Route::get('/chat/fetch/{otherUserId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
     Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::delete('/chat/delete/{messageId}', [ChatController::class, 'delete'])->name('chat.delete');
@@ -144,6 +145,8 @@ Route::middleware('auth')->group(function () {
 // Route for client profile edit
 
 // Route for client profile update (submit the form)
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get('/about',[AboutController::class, 'index'])->name('about');
 
