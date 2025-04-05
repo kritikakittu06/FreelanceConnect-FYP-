@@ -103,6 +103,7 @@ Route::middleware('auth')->group(function () {
           Route::post('client/payment/{postProjectId}/fulfill-order', [PaymentController::class, 'fulfillOrder'])->name('clients.payment.fulfillOrder');
           Route::get('paypal/payment/success', [PaymentController::class, 'paymentSuccess'])->name('clients.payment.success');
           Route::get('paypal/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('clients.payment.cancel');
+          Route::get('/client/transactions', [ClientController::class, 'showTransactions'])->name('client.transactions');
      });
 });
 // Sanjeev
@@ -184,6 +185,7 @@ Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'addN
 
 Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
 
 

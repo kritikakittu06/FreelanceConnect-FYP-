@@ -25,6 +25,9 @@
                     <h2 class="text-3xl font-bold mb-6 text-indigo-900 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Contact Us</h2>
                     <form action="{{ route('contact.submit') }}" method="POST" class="space-y-6">
                         @csrf
+                        @if(session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                        @endif
                         <div class="relative">
                             <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
                             <input type="text" name="name" id="name"

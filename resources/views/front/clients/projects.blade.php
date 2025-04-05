@@ -1,7 +1,7 @@
 @extends('layouts.secondary')
 @section('content')
 <div class="container mx-auto my-5">
-    <h2 class="text-center text-4xl font-semibold text-purple-600 mb-12">All Projects</h2>
+    <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">All Projects</h1>
     <div class="mb-6 flex justify-end">
         <select id="projectStatusFilter" class="border border-gray-300 rounded px-4 py-2">
             <option value="">Select Status</option>
@@ -45,6 +45,7 @@
                 <span class="text-red-600 font-bold">No Projects Found.</span>
             </div>
         @endforelse
+    
     </div>
     <div class="mt-4">
     {{$allPostProjects->appends(request()->query())->links('pagination::simple-tailwind')}}

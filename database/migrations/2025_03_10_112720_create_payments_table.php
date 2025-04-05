@@ -18,11 +18,13 @@ return new class extends Migration
              $table->unsignedBigInteger('paid_to');
              $table->unsignedBigInteger('post_project_id');
              $table->float('amount');
+
              $table->timestamps();
 
              $table->foreign('paid_by')->references('id')->on('users')->onDelete('cascade');
              $table->foreign('post_project_id')->references('id')->on('post_projects')->onDelete('cascade');
              $table->foreign('paid_to')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

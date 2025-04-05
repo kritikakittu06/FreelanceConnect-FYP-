@@ -40,6 +40,16 @@
                     </a>
                 @endif
             @endauth
+
+            @auth
+            @if(auth()->user()->isClient())
+                <a class="text-gray-700 hover:text-purple-600" href="{{ route('client.transactions') }}">
+                   Transactions
+                </a>
+            @endif
+        @endauth
+
+
         </nav>
         <!-- Authentication Links -->
         <div class="flex space-x-4">

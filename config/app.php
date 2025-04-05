@@ -67,6 +67,7 @@ return [
     */
 
     'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -129,7 +130,7 @@ return [
     'PayPal' => Srmklive\PayPal\Facades\PayPal::class,
 ],
 
-    
+
 
 
 ];
