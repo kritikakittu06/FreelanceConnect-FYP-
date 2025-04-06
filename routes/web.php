@@ -24,6 +24,7 @@ use App\Http\Controllers\PostProjectController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\TaskController;
 
 
 // Open Routes
@@ -205,4 +206,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';Route::middleware('role:freelancer')->group(function () {
+    Route::get('/freelancer/todo', [TaskController::class, 'index'])->name('freelancer.todolist');
+
+    // Add these routes for the CRUD operations
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+});

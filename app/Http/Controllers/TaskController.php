@@ -9,8 +9,8 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Task::where('user_id', auth()->id())->get();
-        return response()->json($tasks);
+        $tasks = Task::where('user_id', auth()->user()->id)->get();
+        return view('Freelancer.todo', compact('tasks'));
     }
 
     public function store(Request $request)
@@ -22,6 +22,10 @@ class TaskController extends Controller
         $task = Task::create([
             'title' => $request->title,
             'user_id' => auth()->id(),
+            'status' => 'Pending',
+            'priority' => 'Low',
+
+
         ]);
 
         return response()->json($task);
@@ -29,23 +33,29 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        $this->authorize('update', $task);
+        if ($task->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $request->validate([
-            'completed' => 'required|boolean',
+            'title' => 'sometimes|string|max:255',
+            'status' => 'sometimes|in:Pending,In Progress,Completed',
+            'priority' => 'sometimes|in:Low,Medium,High',
+            'due_date' => 'sometimes|date|nullable',
         ]);
 
-        $task->update($request->only('completed'));
+        $task->update($request->only(['title', 'status', 'priority', 'due_date']));
 
         return response()->json($task);
     }
 
     public function destroy(Task $task)
     {
-        $this->authorize('delete', $task);
+        if ($task->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $task->delete();
-
         return response()->json(['message' => 'Task deleted successfully']);
     }
 }
