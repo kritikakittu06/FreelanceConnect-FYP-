@@ -17,11 +17,12 @@
         <section class="py-16">
             <div class="container mx-auto px-4 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8">Hire Top Talent</h2>
-                <p class="text-lg text-gray-600 mb-12">Join thousands of businesses finding skilled freelancers to bring
-                    their projects to life. Start posting jobs today and connect with experts across various fields.</p>
-                <a href="#"
-                   class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition">Sign
-                    up and start posting jobs</a>
+                <p class="text-lg text-gray-600 mb-12">Join thousands of businesses finding skilled freelancers to bring their projects to life. Start posting jobs today and connect with experts across various fields.</p>
+                @auth
+                    <a href="{{ route('clients.freelancers.index') }}" class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition">Start Posting Projects </a>
+                @else
+                    <a href="{{ route('register') }}" class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition">Sign up and start posting jobs</a>
+                @endauth
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">

@@ -57,15 +57,19 @@ Route::middleware('auth')->group(function () {
           Route::put('/admin/users/{user}/edit', [UserController::class, 'update'])->name('admin.users.update');
           Route::delete('admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
           Route::get('/admin/payments', [AdminPaymentController::class, 'index'])->name('admin.payments.index');
-         Route::prefix('admin')->group(function () {
+          Route::prefix('admin')->group(function () {
             Route::resource('team', TeamMemberController::class)->names([
                 'index' => 'admin.team.index',
-                'create' => 'team.create',
-                'store' => 'team.store',
-                'edit' => 'team.edit',
-                'update' => 'team.update',
-                'destroy' => 'team.destroy',
+                'create' => 'admin.team.create',
+                'store' => 'admin.team.store',
+                'show' => 'admin.team.show',
+                'edit' => 'admin.team.edit',
+                'update' => 'admin.team.update',
+                'destroy' => 'admin.team.destroy',
             ]);
+
+
+
 });
 
      });
@@ -82,7 +86,12 @@ Route::middleware('auth')->group(function () {
           Route::get('/clientprojects', [ClientController::class, 'index'])->name('freelancer.projects');
         Route::post('/clientprojects/{id}/accept', [clientController::class, 'accept'])->name('freelancer.projects.accept');
         Route::post('/clientprojects/{id}/reject', [clientController::class, 'reject'])->name('freelancer.projects.reject');
+        Route::get('/freelancer/todo', [TaskController::class, 'index'])->name('freelancer.todolist');
 
+    // Add these routes for the CRUD operations
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
      });
 
      Route::middleware('role:client')->group(function () {
@@ -207,10 +216,5 @@ Route::middleware(['auth'])->group(function () {
 
 
 require __DIR__.'/auth.php';Route::middleware('role:freelancer')->group(function () {
-    Route::get('/freelancer/todo', [TaskController::class, 'index'])->name('freelancer.todolist');
 
-    // Add these routes for the CRUD operations
-    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
-    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
-    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 });
