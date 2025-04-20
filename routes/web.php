@@ -83,10 +83,11 @@ Route::middleware('auth')->group(function () {
           Route::get('/projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
           Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
 
-          Route::get('/clientprojects', [ClientController::class, 'index'])->name('freelancer.projects');
-        Route::post('/clientprojects/{id}/accept', [clientController::class, 'accept'])->name('freelancer.projects.accept');
-        Route::post('/clientprojects/{id}/reject', [clientController::class, 'reject'])->name('freelancer.projects.reject');
-        Route::get('/freelancer/todo', [TaskController::class, 'index'])->name('freelancer.todolist');
+          Route::get('/clientprojects', [clientController::class, 'index'])->name('freelancer.projects');
+          Route::post('/clientprojects/{id}/accept', [clientController::class, 'accept'])->name('freelancer.projects.accept');
+          Route::post('/clientprojects/{id}/reject', [clientController::class, 'reject'])->name('freelancer.projects.reject');
+          Route::delete('/{id}', [clientController::class, 'delete'])->name('freelancer.projects.delete');
+          Route::get('/freelancer/todo', [TaskController::class, 'index'])->name('freelancer.todolist');
 
     // Add these routes for the CRUD operations
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');

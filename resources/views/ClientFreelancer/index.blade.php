@@ -26,26 +26,30 @@
             </div>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <form method="GET" action="{{ route('clients.freelancers.index') }}"
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    class="grid grid-cols-1 lg:grid-cols-5 gap-4 items-center">
 
-                    <input type="text" name="name" value="{{ request('name') }}" placeholder="Freelancer Name"
-                        class="border border-gray-300 p-2 rounded" autocomplete="off">
+                    <input type="text" name="name" value="{{ request('name') }}"
+                        placeholder="Freelancer Name" class="border border-gray-300 p-2 rounded">
 
                     <input type="text" name="skills" value="{{ request('skills') }}"
                         placeholder="Skills (e.g., PHP, React)" class="border border-gray-300 p-2 rounded">
 
-                    <input type="text" name="budget" value="{{ request('budget') }}" placeholder="Budget"
-                        class="border border-gray-300 p-2 rounded">
+                    <input type="text" name="experience" value="{{ request('experience') }}"
+                        placeholder="Experience" class="border border-gray-300 p-2 rounded">
+
+                    <input type="text" name="budget" value="{{ request('budget') }}"
+                        placeholder="Budget" class="border border-gray-300 p-2 rounded">
 
                     <input type="text" name="location" value="{{ request('location') }}"
                         placeholder="Location (e.g., New York)" class="border border-gray-300 p-2 rounded">
 
-                    <!-- Button spans all columns and is centered -->
-                    <div class="col-span-1 md:col-span-2 md:col-start-2 flex justify-center">
-                        <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded w-full">Search</button>
+                    <div class="lg:col-span-5 flex justify-center">
+                        <button type="submit"
+                            class="bg-purple-600 text-white px-6 py-2 rounded w-full lg:w-auto">Search</button>
                     </div>
                 </form>
             </div>
+
         </div>
     </section>
 

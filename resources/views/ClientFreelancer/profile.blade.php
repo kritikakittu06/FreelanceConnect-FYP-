@@ -7,7 +7,7 @@
         <div class="bg-white shadow rounded p-6">
             <div class="mb-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold">{{ ucwords($freelancer->name) }}</h1>
-                <a href="{{route('clients.post-project.create', $freelancer)}}" class="inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-900">Post Project</a>
+                <a href="{{route('clients.post-project.create', $freelancer)}}" class="inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-900">Post Proposal</a>
             </div>
             <p class="mb-3"><strong>Email:</strong> {{ $freelancer->email }}</p>
             <p class="mb-3"><strong>Skills:</strong>

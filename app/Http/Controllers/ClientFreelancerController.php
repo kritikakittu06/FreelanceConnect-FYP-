@@ -32,6 +32,10 @@ class ClientFreelancerController extends Controller
             $query->where('location', 'LIKE', '%' . $request->location . '%');
         }
 
+        if ($request->filled('experience')) {
+            $query->where('experience', 'LIKE', '%' . $request->experience . '%');
+        }
+
         $freelancers = $query->paginate(9);
 
         // Recommendation logic

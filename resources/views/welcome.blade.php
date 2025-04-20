@@ -7,9 +7,18 @@
                 <h1 class="text-4xl md:text-6xl font-extrabold mb-6">Work with the World's Best Talent</h1>
                 <p class="text-lg md:text-xl mb-8">Connect with top freelancers across various fields to get your projects
                     done efficiently.</p>
-                <a href="#"
-                   class="px-8 py-3 bg-white text-purple-600 font-semibold rounded-lg shadow-lg hover:bg-purple-100 transition">Post
-                    Job</a>
+                    @auth
+                    <a href="{{ route('clients.freelancers.index') }}"
+                       class="px-8 py-3 bg-white text-purple-600 font-semibold rounded-lg shadow-lg hover:bg-purple-100 transition">
+                        Post Job
+                    </a>
+                @else
+                    <a href="{{ route('login') }}"
+                       class="px-8 py-3 bg-white text-purple-600 font-semibold rounded-lg shadow-lg hover:bg-purple-100 transition">
+                        Post Job
+                    </a>
+                @endauth
+
             </div>
         </section>
 
@@ -21,7 +30,7 @@
                 @auth
                     <a href="{{ route('clients.freelancers.index') }}" class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition">Start Posting Projects </a>
                 @else
-                    <a href="{{ route('register') }}" class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition">Sign up and start posting jobs</a>
+                    <a href="{{ route('login') }}" class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition">Sign up and start posting jobs</a>
                 @endauth
             </div>
 

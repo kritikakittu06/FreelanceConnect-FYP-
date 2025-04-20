@@ -11,14 +11,31 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $freelancerId = Auth::id();
-
-        $projects = PostProject::where('freelancer_id', $freelancerId)
-            ->where('status', 'pending') // Only show unaccepted projects
+        // Fetch pending projects
+        $pendingProjects = PostProject::where('freelancer_id', Auth::id())
+            ->where('status', 'pending')
+            ->with('client')
             ->get();
 
-        return view('clients.index', compact('projects'));
+        // Fetch accepted projects
+        $acceptedProjects = PostProject::where('freelancer_id', Auth::id())
+            ->where('status', 'accepted')
+            ->with('client')
+            ->get();
+
+        return view('clients.index', [
+            'pendingProjects' => $pendingProjects,
+            'acceptedProjects' => $acceptedProjects,
+        ]);
     }
+        // $freelancerId = Auth::id();
+
+        // $projects = PostProject::where('freelancer_id', $freelancerId)
+        //     ->where('status', 'pending') // Only show unaccepted projects
+        //     ->get();
+
+        // return view('clients.index', compact('projects'));
+
 
     public function accept($id)
     {
@@ -52,5 +69,15 @@ class ClientController extends Controller
             ->get();
 
         return view('ClientsContact.transactions', compact('transactions'));
+    }
+    public function delete($id)
+    {
+        $project = PostProject::where('id', $id)
+            ->where('freelancer_id', Auth::id())
+            ->firstOrFail();
+
+        $project->delete();
+
+        return redirect()->route('freelancer.projects')->with('success', 'Project deleted successfully!');
     }
 }

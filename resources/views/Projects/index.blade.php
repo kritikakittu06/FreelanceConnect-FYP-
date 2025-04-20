@@ -17,7 +17,7 @@
                             <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ $project->name }}</h5>
                         </div>
                         <div class="flex space-x-2">
-                            <a href="{{ route('projects.edit', $project->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('projects.edit', $project->id) }}" class="bg-green-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
                                 Edit
                             </a>
                             <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?');">

@@ -27,16 +27,22 @@
                 <!-- Email Address -->
                 <div class="mb-4">
                     <x-input-label for="email" :value="__('Email')" class="text-white" />
-                    <x-text-input id="email" class="block mt-1 w-full border border-gray-300 rounded-md p-2"
-                        type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                    <x-text-input id="email"
+                        class="block mt-1 w-full border border-gray-500 rounded-md p-2 bg-gray-800 text-white"
+                        type="text" {{-- Changed from "email" --}} name="email" :value="old('email')" autofocus />
+                    <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-400" />
                 </div>
+
 
                 <!-- Password -->
                 <div class="mb-4">
                     <x-input-label for="password" :value="__('Password')" class="text-white" />
-                    <x-text-input id="password" class="block mt-1 w-full border border-gray-300 rounded-md p-2"
-                        type="password" name="password" required autocomplete="current-password" />
+                    <x-text-input id="password"
+                        class="block mt-1 w-full border border-gray-500 rounded-md p-2 bg-gray-800 text-white"
+                        type="password" {{-- Changed from "password" --}} name="password" />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-400" />
                 </div>
+
 
                 <div class="flex items-center justify-between mt-4">
                     <a href="{{ route('password.request') }}" class="text-white hover:underline">Forgot Password?</a>

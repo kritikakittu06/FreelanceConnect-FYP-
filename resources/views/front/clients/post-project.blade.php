@@ -65,7 +65,7 @@
                     </button>
                     <button type="submit"
                             class="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition">
-                        Submit Project
+                        Submit Proposal
                     </button>
                 </div>
             </form>
